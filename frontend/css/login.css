@@ -1,11 +1,16 @@
-p {
-	color: blue;
-}
-
 button {
 	color: white;
 	background: green;
 	width: 100%;
+}
+
+button:hover {
+	opacity: 0.7;
+}
+
+body {
+	background-image: url("/home/sebastian/Dokumenty/FRONT/queststore-szyfratorzy/frontend/images/loginback.jpg");
+	background-repeat: repeat-x;
 }
 
 input[type="text"], input[type="password"] {
