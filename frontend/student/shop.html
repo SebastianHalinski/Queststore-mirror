@@ -1,50 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-
     <link rel="stylesheet" href="../css/shop.css">
     <meta charset="utf-8">
     <title>Student page</title>
     <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
     <script type="text/javascript" src="../js/script.js"></script>
-
   </head>
   <body>
-
-    <div class="topnav">
-      <a href="../student.html"> <img id="logo" src="../images/codecool-logo.jpg"></a>
-      <div class="container" onclick="animateBurger(this); dropdownMenu();">
-        <div class="bar1"></div>
-        <div class="bar2"></div>
-        <div class="bar3"></div>
-        <div id="myDropdown" class="dropdown-content">
-          <div>
-            <h3 id="name">Kamil Boksa</h3>
-            <img id="userAvatar" src="../images/user-image.jpg">
-            <hr class="style1">
-          </div>
-          <a class= "centered" href="#">Show profile details</a>
-          <a class= "centered" href="#">Logout &nbsp;<i class="fas fa-sign-out-alt"></i></a>
-        </div>
-      </div>
-    </div>
-
-    <div class="sidenav">
-      <h3>Student menu</h3>
-      <ul>
-        <li><a class="sideoptions" href="../student/shop.html"> Shop</a></li>
-        <li><a class="sideoptions" href="../student/myInventory.html"> My Inventory</a></li>
-        <li><a class="sideoptions" href="../student/myTeam.html"> Display my Team</a></li>
-        <li><a class="sideoptions" href="#"> Team Inventory</a></li>
-        <li><a class="sideoptions" href="#"> Pick Quest</a></li>
-        <li><a class="sideoptions" href="#"> Display active quests</a></li>
-        <li><a class="sideoptions" href="#"> Show my attendance</a></li>
-      </ul>
-    </div>
+    <div w3-include-html="student_panel.html"></div>
+     <script>
+      includeHTML();
+     </script> 
 
     <div class="content">
-
       <h2>CODECOOL ONLINE SHOP</h2>
       <div id="price-balance-bar">
         <h4 id="balance">Your account balance: </h4>

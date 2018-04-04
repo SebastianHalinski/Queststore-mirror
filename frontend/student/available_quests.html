@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" type="text/css" href="../css/student.css">
+    <link rel="stylesheet" href="../css/available_quests.css">
+    <meta charset="utf-8">
+    <title>Student page</title>
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="../js/script.js"></script>
+  </head>
+  <body>
+    <div w3-include-html="student_panel.html"></div>
+     <script>
+      includeHTML();
+     </script> 
+
+     <div class="content">
+      <h2>Available Quests</h2>
+      <div id="table">
+        <div class="row" id="tableheading">
+          <div class="cell">Id</div>
+          <div class="cell">Type</div>
+          <div class="cell">Name</div>
+          <div class="cell">Description</div>
+          <div class="cell">Reward</div>
+          <div class="cell">Status</div>
+          <div class="cell"></div>
+        </div>
+        <div class="row">
+            <div class="cell">1</div>
+            <div class="cell">B</div>
+            <div class="cell">Exploring a dungeon</div>
+            <div class="cell">Finishing a Teamwork week</div>
+            <div class="cell">100 cc</div>
+            <div class="cell">Available</div>
+            <div class="cell">
+              <form>
+                  <input class="button" type="button" value="Take Quest!">
+              </form>
+            </div>
+        </div>
+        <div class="row">
+          <div class="cell">2</div>
+          <div class="cell">B</div>
+          <div class="cell">Solving the magic puzzle</div>
+          <div class="cell">Finishing an SI assignment </div>
+          <div class="cell">100 cc</div>
+          <div class="cell">Available</div>
+          <div class="cell">
+            <form>
+              <input class="button" type="button" value="Take Quest!">
+            </form>
+          </div>
+        </div>
+          <div class="row">
+          <div class="cell">3</div>
+          <div class="cell">B</div>
+          <div class="cell">Slaying a dragon</div>
+          <div class="cell">Passing a Checkpoint in the first attemp</div>
+          <div class="cell">500 cc</div>
+          <div class="cell">Available</div>
+          <div class="cell">
+            <form>
+              <input class="button" type="button" value="Take Quest!">
+            </form>
+          </div>
+        </div>
+          <div class="row">
+          <div class="cell">4</div>
+          <div class="cell">E</div>
+          <div class="cell">Spot trap</div>
+          <div class="cell">Spot a major mistake in the assignment</div>
+          <div class="cell">50 cc</div>
+          <div class="cell">Available</div>
+          <div class="cell">
+            <form>
+              <input class="button" type="button" value="Take Quest!">
+            </form>
+          </div>
+        </div>
+        <div class="row">
+          <div class="cell">5</div>
+          <div class="cell">E</div>
+          <div class="cell">Taming a pet</div>
+          <div class="cell">Doing a demo about a pet project</div>
+          <div class="cell">100 cc</div>
+          <div class="cell">Available</div>
+          <div class="cell">
+            <form>
+              <input class="button" type="button" value="Take Quest!">
+            </form>
+          </div>
+        </div>
+      </div>
+  </body>
+</html>
