@@ -9,16 +9,51 @@ body{
     overflow: hidden;
 }
 
-.sidenav{
+.sidenav {
   list-style-type: none;
   margin: 0;
   padding: 0 15px;
-  width: 15%;
+  width: 10%;
   background-color:#f1f1f1;
   height: 100%; /* Full height */
   position: fixed; /* Make it stick, even on scroll */
   overflow: auto;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+.sidenav ul {
+    display: block;
+    padding: 0;     
+    margin: 0;       
+    width: 100%;    
+}
+
+.sidenav li {
+  display: inline;
+  width: 50%;
+  text-align: left;
+}
+
+
+/* If the screen size is 601px wide or more, set the font-size of <div> to 80px */
+@media screen and (min-width: 601px) {
+  .sideoptions {
+    font-size: 14px;
+  }
+
+  .sidenav h3 {
+    font-size: 16px;
+  }
+}
+
+/* If the screen size is 600px wide or less, set the font-size of <div> to 30px */
+@media screen and (max-width: 600px) {
+  .sideoptions {
+    font-size: 10px;
+  }
+  .sidenav h3 {
+    font-size: 12px;
+  }
 }
 
 ul {
