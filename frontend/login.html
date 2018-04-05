@@ -4,6 +4,7 @@
 	<title>Login Page</title>
 	<meta charset="UTF-8">
 	<link rel="stylesheet" type="text/css" href="css/login.css">
+	<script type="text/javascript" src="js/script.js"></script>
 </head>
 <body>
 
@@ -17,11 +18,30 @@
 	Aliquam ultricies sit amet lorem sit amet ultrices.
 	Morbi cursus quam at arcu cursus, eu fringilla tortor porta.
 	Nulla eu felis ullamcorper, porttitor felis eu, porttitor lorem.</p>
-<label for="uname"><b>Username</b></label>
-<input class="field" type="text" placeholder="Enter Username" name="uname" required>
-<label for="psw"><b>Password</b></label>
-<input class="field" type="password" placeholder="Enter Password" name="psw" required>
-<button type="submit">Login</button>
+
+<form name="login">
+	Username<input class="field" type="text" placeholder="Enter Username" name="uname" required>
+	Password<input class="field" type="password" placeholder="Enter Password" name="psw" required>
+	<input type="button" onclick="check(this.form)" value="Login"/>
+	<input type="reset" value="Cancel"/>
+</form>
+
+<script language="javascript">
+function check(form)/*function to check userid & password*/
+{
+ /*the following code checkes whether the entered userid and password are matching*/
+ if(form.uname.value == "admin" && form.psw.value == "admin") {
+    window.open('admin/admin.html', "_self")/*opens the target page while Id & password matches*/
+  } else if(form.uname.value == "mentor" && form.psw.value == "mentor") {
+ 	window.open('mentor/mentor.html', "_self")
+ }  else if(form.uname.value == "student" && form.psw.value == "student") {
+ 	window.open('student/student.html', "_self")
+ } else {
+   alert("Error Password or Username")/*displays error message*/
+  }
+}
+</script>
+
 </div>
 </body>
 </html>
