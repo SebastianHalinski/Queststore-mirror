@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Welcome to Questore</title>
+	 <link rel="stylesheet" type="text/css" href="css/intro.css">
+     <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+     <script	src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="Iam">
+		<p>This is</p>
+		<b>
+  		<div class="innerIam">
+    		Queststore<br /> 
+    		team NazwaGrupy.java<br />
+    		how we learn<br />
+    		Codecool
+   		 </div>
+		</b>
+	</div>
+	<a href="login.html" class="transition"><button>Continue to login</button></a>
+	</div>
+	<script type="text/javascript">
+		$(document).ready(function() {
+    	$("body").css("display", "none");
+ 
+    	$("body").fadeIn(3000);
+ 
+    	$("a.transition").click(function(event){
+        	event.preventDefault();
+        	linkLocation = this.href;
+        	$("body").fadeOut(1000, redirectPage);      
+   	 	});
+         
+    	function redirectPage() {
+        	window.location = linkLocation;
+    	}
+		});
+</script>
+</body>
+</html>
