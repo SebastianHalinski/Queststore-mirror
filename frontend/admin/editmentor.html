@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <link rel="stylesheet" href="../css/editmentor.css">
+    <meta charset="utf-8">
+    <title>Admin page</title>
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="../js/script.js"></script>
+
+  </head>
+  <body>
+    <div w3-include-html="admin_panel.html"></div>
+     <script>
+        includeHTML();
+     </script>
+
+	 <div class="createmenu">
+         <p class="menu">*** Mentor Editor ***<br>
+                [1] edit first name<br>
+                [2] edit last name<br>
+                [3] edit password<br>
+                [4] edit email<br>
+                [5] edit group</p><br>
+		 <label class="header" for="fname"><b>Choose option</b></label><br>
+		 <input class="field" type="text" placeholder="Enter option(1-5)" name="uname" required><br>
+		 <label class="header" for="lname"><b>Write here:</b></label><br>
+		 <input class="field" type="text" placeholder="Enter text" name="lname" required><br>
+
+
+
+		 <button class="but" type="submit">Edit</button>
+	 </div>
+  </body>
+</html>
