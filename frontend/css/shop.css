@@ -46,3 +46,12 @@
     padding-left: 10%;
     padding-top: 3%;
 }
+
+.fa-shopping-cart {
+  cursor: pointer;
+  padding-left: 30px;
+}
+
+.fa-shopping-cart:hover {
+  color: green;
+}

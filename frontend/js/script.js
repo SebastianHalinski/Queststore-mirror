@@ -1,3 +1,15 @@
+function check(form) {
+ if(form.uname.value == "admin" && form.psw.value == "admin") {
+    window.open('admin/admin.html', "_self")
+  } else if(form.uname.value == "mentor" && form.psw.value == "mentor") {
+  window.open('mentor/mentor.html', "_self")
+ }  else if(form.uname.value == "student" && form.psw.value == "student") {
+  window.open('student/student.html', "_self")
+ } else {
+   alert("Error Password or Username")
+  }
+}
+
 function animateBurger(x) {
   x.classList.toggle("change");
 }
