@@ -16,6 +16,10 @@ label {
   margin-top: 4vw;
 }
 
+input[type=checkbox]{
+  margin-top: 20px;
+}
+
 .col-25 {
   float: left;
   width: 25%;
