@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <link rel="stylesheet" href="../css/admin.css">
+    <meta charset="utf-8">
+    <title>Admin page</title>
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="../js/script.js"></script>
+
+  </head>
+  <body>
+
+    <div class="topnav">
+      <a href="admin.html"> <img id="logo" src="../images/codecool-logo.jpg"></a>
+      <div class="container" onclick="animateBurger(this); dropdownMenu();">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+        <div id="myDropdown" class="dropdown-content">
+          <div>
+            <h3 id="name">Konrad Gadzina</h3>
+            <img id="userAvatar" src="../images/konrad-gadzina-2.jpg">
+            <hr class="style1">
+          </div>
+          <a class= "centered" href="#">Show profile details</a>
+          <a class= "centered" href="#">Logout &nbsp;<i class="fas fa-sign-out-alt"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidenav">
+      <h3>Staff management</h3>
+      <ul>
+        <li><a class="sideoptions" href="CreateMentor.html"> Create new mentor</a></li>
+        <li><a class="sideoptions" href="#"> Edit mentor</a></li>
+        <li><a class="sideoptions" href="#"> Display mentor profile</a></li>
+        <li><a class="sideoptions" href="#"> Display students by mentor</a></li>
+      </ul>
+
+      <h3>Group & Exp levels</h3>
+      <ul>
+        <li><a class="sideoptions" href="#"> Create new group</a></li>
+        <li><a class="sideoptions" href="#"> Create experience level</a></li>
+      </ul>
+    </div>
+  </body>
+</html>
