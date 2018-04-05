@@ -78,10 +78,15 @@ body {
     padding-top: 10px;
     font-size: 12px;
   }
+
   .sidenav{
     display: none;
     width: 100%;
     text-align: center;
+  }
+
+  body.mentorMenu .sidenav{
+    display: block;
   }
 
   .sidenav li{
