@@ -46,22 +46,3 @@
     padding-left: 10%;
     padding-top: 3%;
 }
-
-.button {
-    border: 2px solid black;
-    background-color: white;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 5px;;
-    padding: 10px 24px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    border-color: #4CAF50;
-    color: green;
-}
-
-.button:hover {
-    background-color: #4CAF50;
-    color: white;
-}

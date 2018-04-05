@@ -27,22 +27,3 @@
   border-bottom: 1px solid silver;
   font-weight: 200;
 }
-
-.use-button {
-    border: 2px solid black;
-    background-color: white;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 5px;;
-    padding: 5px 10px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    border-color: #4CAF50;
-    color: green;
-}
-
-.use-button:hover {
-    background-color: #4CAF50;
-    color: white;
-}
