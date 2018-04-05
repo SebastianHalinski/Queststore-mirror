@@ -8,11 +8,11 @@
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    border-color: #4CAF50;
-    color: green;
+    border-color: #E74C3C;
+    color: #E74C3C;
 }
 
 .button:hover {
-    background-color: #4CAF50;
+    background-color: #E74C3C;
     color: white;
 }
