@@ -4,6 +4,9 @@
 
     <link rel="stylesheet" href="../css/displaymentor.css">
     <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/responsive_panel.css">
+    <link rel="stylesheet" href="../css/input_style.css">
+    <link rel="stylesheet" href="../css/button.css">
     <meta charset="utf-8">
     <title>Admin page</title>
     <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
@@ -16,12 +19,26 @@
      <script>
         includeHTML();
      </script>
+    <div class="createPanel, responsive_text">
+     <h3 class="content_header">Display mentor</h3>
 
-	 <div class="createmenu">
-         <p>default mentors</p><br>
-		 <label class="header" for="fname"><b>Choose option</b></label><br>
-		 <input class="field" type="text" placeholder="Enter option(1-5)" name="uname" required><br>
-         <a class= "but" href="defaultmentor.html">Show profile details</a>
-	 </div>
+      <h4>To display mentor fill the form:</h4>
+
+      <form>
+        <div class="row">
+          <div class="col-25">
+            <label for="fname">Mentor Id</label>
+          </div>
+          <div class="col-75">
+            <input type="text" id="fname" name="fname">
+          </div>
+        </div>
+
+          <div class="row">
+            <a class="button" href="defaultmentor.html"> Show</a>
+          </div>
+        </div>
+      </form>
+   </div>
   </body>
 </html>

@@ -4,6 +4,9 @@
 
     <link rel="stylesheet" href="../css/editmentor.css">
     <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/responsive_panel.css">
+    <link rel="stylesheet" href="../css/input_style.css">
+    <link rel="stylesheet" href="../css/button.css">
     <meta charset="utf-8">
     <title>Admin page</title>
     <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
@@ -17,25 +20,52 @@
         includeHTML();
      </script>
 
-	 <div class="createmenu">
-         <p>default mentors</p><br>
-         <label class="header" for="lname"><b>Chose mentor by id:</b></label><br>
-		 <input class="field" type="text" placeholder="Enter id" name="lname" required><br>
+	<div class="createPanel, responsive_text">
+        <h3 class="content_header">Create mentor</h3>
 
-         <p class="menu">*** Mentor Editor ***<br>
-                [1] edit first name<br>
-                [2] edit last name<br>
-                [3] edit password<br>
-                [4] edit email<br>
-                [5] edit group</p><br>
-		 <label class="header" for="fname"><b>Choose option</b></label><br>
-		 <input class="field" type="text" placeholder="Enter option(1-5)" name="uname" required><br>
-		 <label class="header" for="lname"><b>Write here:</b></label><br>
-		 <input class="field" type="text" placeholder="Enter text" name="lname" required><br>
+         <h4>To edit mentor fill the form:</h4>
+         <p>    Options:
+             [1] edit first name,
+                [2] edit last name,
+                [3] edit password,
+                [4] edit email,
+                [5] edit group</p>
+         <form>
+           <div class="row">
+             <div class="col-25">
+               <label for="fname">Chose Id</label>
+             </div>
+             <div class="col-75">
+               <input type="text" id="fname" name="fname">
+             </div>
+           </div>
+           <div class="row">
+             <div class="col-25">
+               <label for="lname">Chose option</label>
+             </div>
+             <div class="col-75">
+               <input type="text" id="lname" name="lname">
+             </div>
+           </div>
+           <div class="row">
+             <div class="col-25">
+               <label for="password">Write text</label>
+             </div>
+             <div class="col-75">
+               <input type="text" id="password" name="password">
+             </div>
+           </div>
+
+             <div class="row">
+               <input class="button" id="submit" type="submit" value="Edit">
+             </div>
+           </div>
+         </form>
+      </div>
 
 
 
-		 <button class="but" type="submit">Edit</button>
+		 <button class="button" type="submit">Edit</button>
 	 </div>
   </body>
 </html>

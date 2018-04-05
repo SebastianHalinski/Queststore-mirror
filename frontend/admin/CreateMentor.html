@@ -4,6 +4,9 @@
 
     <link rel="stylesheet" href="../css/creatementor.css">
 	<link rel="stylesheet" href="../css/admin.css">
+	<link rel="stylesheet" href="../css/responsive_panel.css">
+	<link rel="stylesheet" href="../css/input_style.css">
+	<link rel="stylesheet" href="../css/button.css">
     <meta charset="utf-8">
     <title>Admin page</title>
     <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
@@ -16,17 +19,42 @@
      <script>
         includeHTML();
      </script>
+	<div class="createPanel, responsive_text">
+	 <h3 class="content_header">Create mentor</h3>
 
-	 <div class="createmenu">
-		 <label class="header" for="fname"><b>First Name</b></label><br>
-		 <input class="field" type="text" placeholder="Enter Firstname" name="uname" required><br>
-		 <label class="header" for="lname"><b>Last Name</b></label><br>
-		 <input class="field" type="password" placeholder="Enter Lastname" name="lname" required><br>
-		 <label class="header" for="lname"><b>Password</b></label><br>
-		 <input class="field" type="password" placeholder="Enter Password" name="psw" required><br>
+	  <h4>To create mentor fill the form:</h4>
 
+	  <form>
+		<div class="row">
+		  <div class="col-25">
+			<label for="fname">First Name</label>
+		  </div>
+		  <div class="col-75">
+			<input type="text" id="fname" name="fname">
+		  </div>
+		</div>
+		<div class="row">
+		  <div class="col-25">
+			<label for="lname">Last Name</label>
+		  </div>
+		  <div class="col-75">
+			<input type="text" id="lname" name="lname">
+		  </div>
+		</div>
+		<div class="row">
+		  <div class="col-25">
+			<label for="password">Password</label>
+		  </div>
+		  <div class="col-75">
+			<input type="text" id="password" name="password">
+		  </div>
+		</div>
 
-		 <button class="but" type="submit">Create</button>
-	 </div>
+		  <div class="row">
+			<input class="button" id="submit" type="submit" value="Submit">
+		  </div>
+		</div>
+	  </form>
+   </div>
   </body>
 </html>
