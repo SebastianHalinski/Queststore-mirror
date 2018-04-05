@@ -3,6 +3,10 @@ body {
   font-family: 'Varela Round', sans-serif;
 }
 
+#lastElement{
+  padding-bottom: 20px;
+}
+
 /* Add a black background color to the top navigation */
 .topnav {
     background-color: #333;
@@ -13,7 +17,7 @@ body {
   list-style-type: none;
   margin: 0;
   padding: 0 15px;
-  width: 10%;
+  width: 20%;
   background-color:#f1f1f1;
   height: 100%; /* Full height */
   position: fixed; /* Make it stick, even on scroll */
@@ -23,12 +27,13 @@ body {
 
 .sidenav ul {
     display: block;
-    padding: 0;     
-    margin: 0;       
-    width: 100%;    
+    padding: 0;
+    margin: 0;
+    width: 100%;
 }
 
 .sidenav li {
+  padding: 0;
   display: inline;
   width: 50%;
   text-align: left;
@@ -36,7 +41,7 @@ body {
 
 
 /* If the screen size is 601px wide or more, set the font-size of <div> to 80px */
-@media screen and (min-width: 601px) {
+@media screen and (min-width: 851px) {
   .sideoptions {
     font-size: 14px;
   }
@@ -44,16 +49,44 @@ body {
   .sidenav h3 {
     font-size: 16px;
   }
+
+  .sidenav{
+    width: 20%;
+
+  }
 }
 
 /* If the screen size is 600px wide or less, set the font-size of <div> to 30px */
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 850px) {
   .sideoptions {
-    font-size: 10px;
+    font-size: 12px;
   }
   .sidenav h3 {
     font-size: 12px;
   }
+
+  .sidenav{
+    width: 30%;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .sideoptions {
+    font-size: 12px;
+  }
+  .sidenav h3 {
+    padding-top: 10px;
+    font-size: 12px;
+  }
+  .sidenav{
+    width: 100%;
+    text-align: center;
+  }
+
+  .sidenav li{
+    text-align: center;
+  }
+
 }
 
 ul {
@@ -104,9 +137,9 @@ li a:hover {
 }
 
 hr.style1 {
-	height: 10px;
-	border: 0;
-	box-shadow: 0 10px 10px -10px #8c8b8b inset;
+  height: 10px;
+  border: 0;
+  box-shadow: 0 10px 10px -10px #8c8b8b inset;
 }
 
 .container {
