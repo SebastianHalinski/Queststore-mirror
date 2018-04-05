@@ -33,6 +33,10 @@
   display:table-row; 
 }
 
+.row:hover {
+  background-color: #d3d3d3;
+}
+
 .cell {
   display:table-cell;
   padding: 5px 10px;
