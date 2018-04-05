@@ -27,16 +27,3 @@
   border-bottom: 1px solid silver;
   font-weight: 200;
 }
-
-.use-button {
-    background-color: white;
-    color: black;
-    border: 1px solid #4CAF50;
-    border-radius: 3px;
-    cursor: pointer;
-}
-
-.use-button:hover {
-    background-color: #4CAF50;
-    color: white;
-}
