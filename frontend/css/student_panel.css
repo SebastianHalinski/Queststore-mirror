@@ -84,6 +84,9 @@ body {
     text-align: center;
   }
 
+  body.studentMenu .sidenav{
+    display: block;
+  }
   .sidenav li{
     text-align: center;
   }
