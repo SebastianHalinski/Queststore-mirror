@@ -1,0 +1,38 @@
+.content {
+  padding-left: 15%;
+  margin: 0;
+}
+
+.content h2 {
+  text-align: center;
+  padding-right: 10%;
+}
+
+.attendance {
+  margin: 0 auto;
+  width: 75%;
+}
+
+@media (min-width: 601px) {
+.attendance h3 {
+	border: 1px solid #4CAF50;
+	width : 30%;
+	text-align: center;
+	margin: 10% 30%;
+	border-radius: 5px;
+  font-size: 22px;
+  
+  }
+}
+
+@media (max-width: 600px) {
+  .attendance h3 {
+    border: 1px solid #4CAF50;
+    width : 30%;
+    text-align: center;
+    margin: 10% 30%;
+    border-radius: 5px;
+    font-size: 12px;
+    padding: 3% 5%;
+  }
+  }

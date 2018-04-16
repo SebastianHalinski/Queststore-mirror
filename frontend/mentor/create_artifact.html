@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="../css/mentor_panel.css">
+    <link rel="stylesheet" href="../css/responsive_panel.css">
+    <link rel="stylesheet" href="../css/input_style.css">
+    <link rel="stylesheet" href="../css/button.css">
+    <link rel="stylesheet" href="../css/content_header.css">
+    <meta charset="utf-8">
+    <title>Create artifact</title>
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="../js/script.js"></script>
+
+  </head>
+  <body>
+     <div w3-include-html="mentor_panel.html"></div>
+
+     <div class="createPanel, responsive_text">
+       <h3 class="content_header">Create artifact</h3>
+
+        <h4>To create artifact fill the form:</h4>
+
+        <form>
+          <div class="row">
+            <div class="col-25">
+              <label for="aname">Artifact name</label>
+            </div>
+            <div class="col-75">
+              <input type="text" id="aname" name="aname">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-25">
+              <label for="desc">Description</label>
+            </div>
+            <div class="col-75">
+              <input type="text" id="desc" name="desc">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-25">
+              <label for="price">Artifact price</label>
+            </div>
+            <div class="col-75">
+              <input type="text" id="price" name="price">
+            </div>
+          </div>
+
+            <div class="row">
+              <input class="button" id="submit" type="submit" value="Submit">
+            </div>
+          </div>
+        </form>
+     </div>
+
+    <script>
+      includeHTML();
+    </script>
+  </body>
+</html>
+
+

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <link rel="stylesheet" href="../css/admin_panel.css">
+    <link rel="stylesheet" href="../css/responsive_panel.css">
+    <link rel="stylesheet" href="../css/input_style.css">
+    <link rel="stylesheet" href="../css/button.css">
+    <link rel="stylesheet" href="../css/content_header.css">
+    <meta charset="utf-8">
+    <title>Admin page</title>
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="../js/script.js"></script>
+
+  </head>
+  <body>
+    <div w3-include-html="admin_panel.html"></div>
+     <script>
+        includeHTML();
+     </script>
+    <div class="createPanel, responsive_text">
+     <h3 class="content_header">Display students by mentor</h3>
+
+      <h4>To display students fill the form:</h4>
+
+      <form>
+        <div class="row">
+          <div class="col-25">
+            <label for="fname">Mentor Id</label>
+          </div>
+          <div class="col-75">
+            <input type="text" id="fname" name="fname">
+          </div>
+        </div>
+
+          <div class="row">
+            <a class="button" href="defaultstudents.html"> Show</a>
+          </div>
+        </div>
+      </form>
+   </div>
+  </body>
+</html>

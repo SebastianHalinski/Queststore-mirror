@@ -1,0 +1,58 @@
+.content {
+  padding-left: 15%;
+  margin: 0;
+}
+.content h2 {
+  text-align: center;
+  padding-right: 10%;
+}
+#price-balance-bar {
+  padding-right: 15%;
+}
+#balance {
+  float: left;
+  margin-left: 12%;
+}
+
+#amount {
+  float: right;;
+}
+
+#table {
+  display:table;
+  padding-top: 5%;
+  padding-left: 12%;
+  width: 75%;
+  overflow-x: auto;
+}
+
+#tableheading {
+  font-weight: 600;
+}
+
+.row {
+  display:table-row; 
+}
+
+.row:hover {
+  background-color: #d3d3d3;
+}
+
+.cell {
+  display:table-cell;
+  padding: 5px 10px;
+}
+
+.buy-buttons {
+    padding-left: 10%;
+    padding-top: 3%;
+}
+
+.fa-shopping-cart {
+  cursor: pointer;
+  padding-left: 30px;
+}
+
+.fa-shopping-cart:hover {
+  color: green;
+}
