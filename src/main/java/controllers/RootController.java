@@ -1,13 +1,17 @@
 package controllers;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.util.List;
 
+import com.sun.net.httpserver.HttpServer;
 import dao.*;
 import enums.DatabaseSetup;
 import enums.FilePath;
 import exceptions.LoginFailure;
 import factory.ConnectionFactory;
 import managers.*;
+import tools.Static;
 import view.RootView;
 
 
@@ -27,29 +31,16 @@ public class RootController {
     }
 
     public void runApplication(){
-        view.clearScreen();
-        view.displayLoadingStars();
-        while (! shouldExit){
-            executeIntro();
-            String[] correctChoices = {"0", "1", "2"};
-            view.displayLoginScreen();
-            String userInput = view.getMenuChoice(correctChoices);
-          
-            switch (userInput) {
-                case "1":
-                    UserController controller = loggingProcedure();
-                    if (controller != null) {
-                        controller.executeMainMenu();
-                    }
-                    break;
-                case "2":
-                    showAuthors();
-                    break;
-                case "0":
-                    shouldExit = true;
-                    executeOutro();
-                    ConnectionFactory.shutdownConnections();
-            }
+        try {
+            HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
+
+            server.createContext("/static", new Static());
+            server.createContext("/login", new LoginController());
+            server.createContext("/", new IntroController());
+            server.setExecutor(null);
+            server.start();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
