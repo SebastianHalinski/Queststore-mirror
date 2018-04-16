@@ -37,48 +37,12 @@ public class RootController {
             server.createContext("/static", new Static());
             server.createContext("/login", new LoginController());
             server.createContext("/", new IntroController());
+            server.createContext("/admin", new AdminController());
             server.setExecutor(null);
             server.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private UserController loggingProcedure() {
-        String login = view.getLogin();
-        String password = view.getPassword();
-        UserController controller = null;
-        try {
-            controller = SpecialDaoFactory.getByType(LoginDAO.class).getUserControllerByLoginAndPassword(login, password);
-        } catch (LoginFailure ex) {
-            view.clearScreen();
-            view.displayMessage(ex.getMessage());
-            view.handlePause();
-        }
-        return controller;
-    }
-
-    private void executeIntro() {
-        String introFilePath = FilePath.INTRO.getPath();
-        FileManager manager = new FileManagerImpl(introFilePath);
-        List<String> introData = manager.getData();
-        view.displayCollectionData(introData);
-    }
-
-    private void executeOutro() {
-        String outroFilePath = FilePath.OUTRO.getPath();
-        FileManager manager = new FileManagerImpl(outroFilePath);
-        List<String> outroData = manager.getData();
-        view.displayCollectionData(outroData);
-        view.handlePause();
-    }
-
-    private void showAuthors() {
-        String authorsFilePath = FilePath.AUTHORS.getPath();
-        FileManager manager = new FileManagerImpl(authorsFilePath);
-        List<String> introData = manager.getData();
-        view.displayCollectionData(introData);
-        view.handlePause();
     }
 
     private void setDatabase() {

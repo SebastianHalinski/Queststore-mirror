@@ -15,7 +15,7 @@ public class UserControllerFactory {
         switch(userName) {
             case("Admin"):
                 Admin admin = (Admin) user;
-                controller = new AdminController(admin);
+                controller = new AdminController();
                 break;
             case("Mentor"):
                 Mentor mentor = (Mentor) user;

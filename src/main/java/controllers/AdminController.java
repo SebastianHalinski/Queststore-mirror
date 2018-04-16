@@ -1,24 +1,57 @@
 package controllers;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.List;
+import java.util.Map;
 
+import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
 import factory.GeneralModelFactory;
 import model.MentorFactoryImpl;
 import model.Admin;
 import model.Mentor;
 import model.Student;
+import org.jtwig.JtwigModel;
+import org.jtwig.JtwigTemplate;
 import view.AdminView;
 
 
 
-public class AdminController extends UserControllerImpl{
+public class AdminController extends UserControllerImpl implements HttpHandler {
 
     private Admin admin;
     private AdminView view;
 
-    public AdminController(Admin admin){
-        this.admin = admin;
-        this.view = new AdminView();
+    @Override
+    public void handle(HttpExchange httpExchange) throws IOException {
+        String response = " ";
+        String method = httpExchange.getRequestMethod();
+        JtwigTemplate template = JtwigTemplate.classpathTemplate("templates/admin/admin.twig");
+        JtwigModel model = JtwigModel.newModel();
+
+        if (method.equals("GET")) {
+            response = template.render(model);
+        }
+        if (method.equals("POST")) {
+            //actions
+            response = "PIWO";
+        }
+        sendResponse(response, httpExchange);
+    }
+
+    private void sendResponse(String response, HttpExchange httpExchange) {
+        try {
+            httpExchange.sendResponseHeaders(200, response.length());
+            OutputStream os = httpExchange.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void executeMainMenu(){

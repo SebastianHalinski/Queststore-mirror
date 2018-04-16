@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="../css/student_panel.css">
+    <link rel="stylesheet" type="text/css" href="../css/team_inventory.css">
+    <link rel="stylesheet" type="text/css" href="../../src/main/resources/static/button.css">
+    <meta charset="utf-8">
+    <title>Student page</title>
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="../js/script.js"></script>
+  </head>
+  <body>
+    <div w3-include-html="student_panel.html"></div>
+     <script>
+      includeHTML();
+     </script>
+
+    <div class="content">
+      <h2>Team Inventory</h2>
+      <div id="table">
+        <div class="row" id="tableheading">
+          <div class="cell">Id</div>
+          <div class="cell">Artifact name</div>
+          <div class="cell">Amount</div>
+          <div class="cell"></div>
+        </div>
+        <div class="row">
+          <div class="cell">1</div>
+          <div class="cell">Summon Code Elemental</div>
+          <div class="cell">1</div>
+          <div class="cell">
+            <form>
+              <input class="use-button button" type="button" value="Use artifact!">
+            </form>
+          </div>
+        </div>
+        <div class="row">
+          <div class="cell">2</div>
+          <div class="cell">Circle of Sorcery</div>
+          <div class="cell">1</div>
+          <div class="cell">
+            <form>
+              <input class="use-button button" type="button" value="Use artifact!">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
