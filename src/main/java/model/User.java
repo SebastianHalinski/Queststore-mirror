@@ -9,6 +9,7 @@ public abstract class User extends ActiveModel {
     private String email;
     private String password;
     private String role;
+    private String sessionId;
 
     User(int id, String firstName, String lastName, String email, String password) {
         this(firstName, lastName, password);
@@ -82,5 +83,13 @@ public abstract class User extends ActiveModel {
         int signMultiplier = 100;
         return String.format("\t%s, role: %s, id: %s, email: %s\n\t%s\n",
                 getFullName(), role, getId(), getEmail(), DataTool.getMultipliedString(sign, signMultiplier));
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    public String getSessionId() {
+        return sessionId;
     }
 }

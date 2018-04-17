@@ -55,7 +55,6 @@ public class Static implements HttpHandler {
         OutputStream os = httpExchange.getResponseBody();
 
         // send the file
-        System.out.println(file);
         FileInputStream fs = new FileInputStream(file);
         final byte[] buffer = new byte[0x10000];
         int count = 0;
