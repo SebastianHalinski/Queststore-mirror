@@ -1,5 +1,7 @@
 package controllers;
 
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
 import enums.QuestsStatus;
 import factory.GeneralModelFactory;
 import model.ArtifactFactoryImpl;
@@ -9,18 +11,37 @@ import model.Mentor;
 import model.Student;
 import model.Artifact;
 import model.Quest;
+import org.jtwig.JtwigModel;
+import org.jtwig.JtwigTemplate;
 import view.MentorView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MentorController extends UserControllerImpl {
+public class MentorController extends UserControllerImpl implements HttpHandler {
     private MentorView view;
     private Mentor mentor;
 
-    public MentorController(Mentor mentor){
+    public MentorController(){
         this.mentor = mentor;
         view = new MentorView();
+    }
+
+    @Override
+    public void handle(HttpExchange httpExchange) throws IOException {
+        String response = " ";
+        String method = httpExchange.getRequestMethod();
+        JtwigTemplate template = JtwigTemplate.classpathTemplate("templates/mentor/mentor.twig");
+        JtwigModel model = JtwigModel.newModel();
+
+        if (method.equals("GET")) {
+            response = template.render(model);
+        }
+        if (method.equals("POST")) {
+            //actions
+        }
+        view.sendResponse(response, httpExchange);
     }
 
     public void executeMainMenu() {

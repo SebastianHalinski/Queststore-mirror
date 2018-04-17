@@ -26,6 +26,10 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
     private Admin admin;
     private AdminView view;
 
+    public AdminController() {
+        this.view = new AdminView();
+    }
+
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         String response = " ";
@@ -40,18 +44,7 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
             //actions
             response = "PIWO";
         }
-        sendResponse(response, httpExchange);
-    }
-
-    private void sendResponse(String response, HttpExchange httpExchange) {
-        try {
-            httpExchange.sendResponseHeaders(200, response.length());
-            OutputStream os = httpExchange.getResponseBody();
-            os.write(response.getBytes());
-            os.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        view.sendResponse(response, httpExchange);
     }
 
     public void executeMainMenu(){

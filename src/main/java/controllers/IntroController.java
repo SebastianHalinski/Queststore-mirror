@@ -18,9 +18,6 @@ public class IntroController implements HttpHandler {
         if (method.equals("GET")) {
             response = template.render(model);
         }
-        if (method.equals("POST")) {
-            response = "POST";
-        }
         sendResponse(response, httpExchange);
     }
 

@@ -38,6 +38,8 @@ public class RootController {
             server.createContext("/login", new LoginController());
             server.createContext("/", new IntroController());
             server.createContext("/admin", new AdminController());
+            server.createContext("/mentor", new MentorController());
+            server.createContext("/student", new StudentController());
             server.setExecutor(null);
             server.start();
         } catch (IOException e) {

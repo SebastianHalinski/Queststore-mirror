@@ -19,11 +19,11 @@ public class UserControllerFactory {
                 break;
             case("Mentor"):
                 Mentor mentor = (Mentor) user;
-                controller = new MentorController(mentor);
+                controller = new MentorController();
                 break;
             case("Student"):
                 Student student = (Student) user;
-                controller = new StudentController(student);
+                controller = new StudentController();
                 break;
         }
         return controller;

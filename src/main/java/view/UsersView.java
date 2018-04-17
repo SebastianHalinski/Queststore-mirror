@@ -1,13 +1,27 @@
 package view;
 
+import com.sun.net.httpserver.HttpExchange;
 import model.Attendance;
 import model.Inventory;
 import model.Item;
 import model.User;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 public class UsersView extends AbstractView {
+
+    public void sendResponse(String response, HttpExchange httpExchange) {
+        try {
+            httpExchange.sendResponseHeaders(200, response.length());
+            OutputStream os = httpExchange.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public <T extends User> void  displayUserWithDetails(T user){
         System.out.println(doubleTab + user.getFullDataToString());
