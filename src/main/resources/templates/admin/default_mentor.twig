@@ -2,34 +2,33 @@
 <html lang="en">
   <head>
 
-    <link rel="stylesheet" href="../css/student_details.css">
-    <link rel="stylesheet" type="text/css" href="../css/admin_panel.css">
+    <link rel="stylesheet" href="static/css/student_details.css">
+    <link rel="stylesheet" type="text/css" href="static/css/admin_panel.css">
     <meta charset="utf-8">
     <title>Student page</title>
     <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="../js/script.js"></script>
+    <script type="text/javascript" src="static/js/script.js"></script>
 
   </head>
   <body>
-    <div w3-include-html="admin_panel.html"></div>
-    <script>
-      includeHTML();
-    </script>
+
 
     <div class="content">
       <h2>Mentor details</h2>
       <hr>
       <div class="details">
-          <h3>Fullname: Default Mentor</h3>
-          <h3>Role: Mentor</h3>
-          <h3>ID: 100</h3>
-          <h3>Email: abcdefg@gmail.com</h3>
+          <h3>Fullname: {{ mentorName }}</h3>
+          <h3>Role: {{ role }}</h3>
+          <h3>ID: {{ idNumber }}</h3>
+          <h3>Email: {{ emailAdress }}</h3>
           <hr>
-          <h3>Group: 2017.2</h3>
-          <h3>Team: NazwaGrupy.java</h3>
+          <h3>Group: {{ groupName }}</h3>
+          <h3>Team: {{ teamName }}</h3>
           <hr>
       </div>
 
   </body>
+
+  {% include "admin_panel.twig" %}
   </html>
