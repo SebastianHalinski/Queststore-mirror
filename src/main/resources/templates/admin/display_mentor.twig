@@ -15,10 +15,7 @@
 
   </head>
   <body>
-    <div w3-include-html="admin_panel.html"></div>
-     <script>
-        includeHTML();
-     </script>
+
     <div class="createPanel, responsive_text">
      <h3 class="content_header">Display mentor</h3>
 
@@ -35,10 +32,13 @@
         </div>
 
           <div class="row">
-            <a class="button" href="default_mentor.twig"> Show</a>
+            <a class="button" href="search_mentor"> Show</a>
           </div>
         </div>
       </form>
    </div>
   </body>
+
+  {% include "admin_panel.twig" %}
+
 </html>

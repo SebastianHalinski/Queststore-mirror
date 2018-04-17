@@ -2,21 +2,17 @@
 <html lang="en">
   <head>
 
-    <link rel="stylesheet" href="../css/student_details.css">
-    <link rel="stylesheet" type="text/css" href="../css/admin_panel.css">
-    <link rel="stylesheet" href="../css/my_team.css">
+    <link rel="stylesheet" href="static/css/student_details.css">
+    <link rel="stylesheet" type="text/css" href="static/css/admin_panel.css">
+    <link rel="stylesheet" href="static/css/my_team.css">
     <meta charset="utf-8">
     <title>Student page</title>
     <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="../js/script.js"></script>
+    <script type="text/javascript" src="static/js/script.js"></script>
 
   </head>
   <body>
-    <div w3-include-html="admin_panel.html"></div>
-    <script>
-      includeHTML();
-    </script>
 
     <div class="content">
       <h2>Students details</h2>
@@ -24,12 +20,14 @@
       <div class="team">
         <h3>Team name: Random</h3>
         <ol>
-          <li>Kamil Boksa role: student id: 105 email: abcd@gmail.com</li>
-          <li>Marcinek Stasik role: student id: 100 email: lolek@gmail.com</li>
-          <li>Jadzia Piernik role: student id: 101 email: jadzia@cc.com</li>
-          <li>Maciek Jankowicz role: student id: 102 email: maciek99@cc.com</li>
+          {% for student in studentList
+          if teamName == student.teamName%}
+          <li>student.getName(), role: student id: student.getId(), email: student.getEmail()</li>
         </ol>
       </div>
 
   </body>
+
+  {% include "admin_panel.twig" %}
+
   </html>
