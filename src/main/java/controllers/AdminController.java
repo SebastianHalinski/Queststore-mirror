@@ -40,7 +40,7 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
         if (method.equals("GET")) {
             response = template.render(model);
             String uri = httpExchange.getRequestURI().toString();
-            final String adminRoot = "/admin";
+            String adminRoot = "/admin";
             if (uri.startsWith(adminRoot)) {
                 if (uri.startsWith("/create_mentor", adminRoot.length())) {
                     template = JtwigTemplate.classpathTemplate("templates/admin/create_mentor.twig");
@@ -49,6 +49,13 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
                 if (uri.startsWith("/admin", adminRoot.length())) {
                     Headers responseHeaders = httpExchange.getResponseHeaders();
                     responseHeaders.add("Location", "/admin");
+                    httpExchange.sendResponseHeaders(302, -1);
+                    httpExchange.close();
+                    return;
+                }
+                if (uri.startsWith("/login", adminRoot.length())) {
+                    Headers responseHeaders = httpExchange.getResponseHeaders();
+                    responseHeaders.add("Location", "/login");
                     httpExchange.sendResponseHeaders(302, -1);
                     httpExchange.close();
                     return;
