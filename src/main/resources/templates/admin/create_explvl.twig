@@ -2,19 +2,21 @@
 <html lang="en">
   <head>
 
-	<link rel="stylesheet" href="static/css/admin_panel.css">
-	<link rel="stylesheet" href="static/css/responsive_panel.css">
-	<link rel="stylesheet" href="static/css/input_style.css">
-	<link rel="stylesheet" href="static/button.css">
-	<link rel="stylesheet" href="static/css/content_header.css">
+	<link rel="stylesheet" href="/static/css/admin_panel.css">
+	<link rel="stylesheet" href="/static/css/responsive_panel.css">
+	<link rel="stylesheet" href="/static/css/input_style.css">
+	<link rel="stylesheet" href="/static/css/button.css">
+	<link rel="stylesheet" href="/static/css/content_header.css">
     <meta charset="utf-8">
     <title>Admin page</title>
     <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="static/js/script.js"></script>
+    <script type="text/javascript" src="/static/js/script.js"></script>
 
   </head>
   <body>
+
+  {% include "admin_panel.twig" %}
 
 	<div class="createPanel, responsive_text">
 	 <h3 class="content_header">Create new expirience level</h3>
@@ -46,5 +48,5 @@
    </div>
   </body>
 
-  {% include "admin_panel.twig" %}
+
 </html>
