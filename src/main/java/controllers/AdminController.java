@@ -47,23 +47,20 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
                     if (uri.startsWith("/create_mentor", adminRoot.length())) {
                         template = JtwigTemplate.classpathTemplate("templates/admin/create_mentor.twig");
                         response = template.render(model);
-                    }
-                    else if(uri.startsWith("/admin_details", adminRoot.length())) {
+                    } else if (uri.startsWith("/admin_details", adminRoot.length())) {
                         template = JtwigTemplate.classpathTemplate("templates/admin/admin_details.twig");
                         model.with("adminName", admin.getFullName());
                         model.with("roleDetail", admin.getRole());
                         model.with("idNumber", String.valueOf(admin.getId()));
                         model.with("emailAdress", admin.getEmail());
                         response = template.render(model);
-                    }
-                    else if (uri.startsWith("/admin", adminRoot.length())) {
+                    } else if (uri.startsWith("/admin", adminRoot.length())) {
                         Headers responseHeaders = httpExchange.getResponseHeaders();
                         responseHeaders.add("Location", "/admin");
                         httpExchange.sendResponseHeaders(302, -1);
                         httpExchange.close();
                         return;
-                    }
-                    else if (uri.startsWith("/login", adminRoot.length())) {
+                    } else if (uri.startsWith("/login", adminRoot.length())) {
                         Headers responseHeaders = httpExchange.getResponseHeaders();
                         responseHeaders.add("Location", "/login");
                         httpExchange.sendResponseHeaders(302, -1);
@@ -72,13 +69,31 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
                     }
                 }
             }
-            if (method.equals("POST")) {
-                //actions
-                response = "PIWO";
+                if (method.equals("POST")) {
+                    //actions
+                    response = template.render(model);
+                    String uri = httpExchange.getRequestURI().toString();
+                    String adminRoot = "/admin";
+                    if (uri.startsWith(adminRoot)) {
+                        if (uri.startsWith("/create_mentor", adminRoot.length())) {
+                            InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
+                            BufferedReader br = new BufferedReader(isr);
+                            String formData = br.readLine();
+                            Map inputs = parseFormData(formData);
+                            createMentorProcedure(inputs);
+                            Headers responseHeaders = httpExchange.getResponseHeaders();
+                            responseHeaders.add("Location", "/admin");
+                            httpExchange.sendResponseHeaders(302, -1);
+                            httpExchange.close();
+                            return;
+                        } else if (uri.startsWith("/edit_mentor", adminRoot.length())) {
+                            //Edit mentor
+                        }
+                    }
+                }
+                view.sendResponse(response, httpExchange);
             }
-            view.sendResponse(response, httpExchange);
         }
-    }
 
     private Admin getLoggedAdmin(HttpExchange httpExchange) throws IOException {
         String adminRoot = "/admin?";
@@ -102,80 +117,12 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
         return map;
     }
 
-    private void createMentor(){
-        String firstName = view.getUserInput("Enter first name: ");
-        String lastName = view.getUserInput("Enter last name: ");
-        String password = view.getUserInput("Enter password: ");
-        Mentor mentor = GeneralModelFactory.getByType(MentorFactoryImpl.class)
-                                .create(firstName, lastName, password);
-        view.clearScreen();
-        view.displayMessageInNextLine("Mentor created: \n");
-        view.displayUserWithDetails(mentor);
-    }
-
-    private void editMentor() {
-        Mentor mentor = SchoolController.getMentorByUserChoice();
-        if (mentor != null) {
-            boolean isFinished = false;
-            while (!isFinished) {
-                view.clearScreen();
-                view.displayEditMenu();
-                String userChoice = view.getUserInput("Select an option: ");
-                view.clearScreen();
-                view.displayMessage("Mentor to edit:\n");
-                view.displayUserWithDetails(mentor);
-                view.drawNextLine();
-                switch (userChoice) {
-                    case "1":
-                        String firstName = view.getUserInput("Enter first name: ");
-                        mentor.setFirstName(firstName);
-                        break;
-                    case "2":
-                        String lastName = view.getUserInput("Enter last name: ");
-                        mentor.setLastName(lastName);
-                        break;
-                    case "3":
-                        String password = view.getUserInput("Enter password: ");
-                        mentor.setPassword(password);
-                        break;
-                    case "4":
-                        String email = view.getUserInput("Enter email: ");
-                        mentor.setEmail(email);
-                        break;
-                    case "5":
-                        SchoolController.assignMentorToGroup(mentor);
-                        break;
-                    case "0":
-                        isFinished = true;
-                        break;
-                }
-                if (!isFinished) {
-                    view.clearScreen();
-                    view.displayMessageInNextLine("Mentor`s data:\n");
-                    view.displayUserWithDetails(mentor);
-                    view.handlePause();
-                }
-            }
-        }
-    }
-
-    private void displayMentorProfile() {
-        Mentor mentor = SchoolController.getMentorByUserChoice();
-        if(mentor != null) {
-            view.clearScreen();
-            view.displayMessageInNextLine("Mentor's details:\n");
-            view.displayUserWithDetails(mentor);
-        }
-    }
-
-    private void displayStudentsByMentor() {
-        Mentor mentor = SchoolController.getMentorByUserChoice();
-        if(mentor != null) {
-            view.clearScreen();
-            view.displayMessageInNextLine("Students:\n");
-            List<Student> students = SchoolController.getStudentsByGroup(mentor.getGroup());
-            view.displayObjects(students);
-        }
+    private void createMentorProcedure(Map inputs){
+        String firstName = inputs.get("fname").toString();
+        String lastName = inputs.get("lname").toString();
+        String password = inputs.get("password").toString();
+        System.out.println(firstName + lastName + password);
+        GeneralModelFactory.getByType(MentorFactoryImpl.class).create(firstName, lastName, password);
     }
 
     private void runExpLevelManager(){
