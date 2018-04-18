@@ -17,7 +17,6 @@ import org.jtwig.JtwigTemplate;
 import view.AdminView;
 
 
-
 public class AdminController extends UserControllerImpl implements HttpHandler {
 
     private AdminView view;
@@ -69,29 +68,53 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
                     }
                 }
             }
-                if (method.equals("POST")) {
-                    //actions
-                    response = template.render(model);
-                    String uri = httpExchange.getRequestURI().toString();
-                    String adminRoot = "/admin";
-                    if (uri.startsWith(adminRoot)) {
-                        if (uri.startsWith("/create_mentor", adminRoot.length())) {
-                            InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
-                            BufferedReader br = new BufferedReader(isr);
-                            String formData = br.readLine();
-                            Map inputs = parseFormData(formData);
-                            createMentorProcedure(inputs);
-                            Headers responseHeaders = httpExchange.getResponseHeaders();
-                            responseHeaders.add("Location", "/admin");
-                            httpExchange.sendResponseHeaders(302, -1);
-                            httpExchange.close();
-                            return;
-                        } else if (uri.startsWith("/edit_mentor", adminRoot.length())) {
-                            //Edit mentor
-                        }
+            if (method.equals("POST")) {
+                //actions
+                response = template.render(model);
+                String uri = httpExchange.getRequestURI().toString();
+                String adminRoot = "/admin";
+                if (uri.startsWith(adminRoot)){
+                    if (uri.startsWith("/create_mentor", adminRoot.length())) {
+                        InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
+                        BufferedReader br = new BufferedReader(isr);
+                        String formData = br.readLine();
+                        Map inputs = parseFormData(formData);
+                        createMentorProcedure(inputs);
+                        Headers responseHeaders = httpExchange.getResponseHeaders();
+                        responseHeaders.add("Location", "/admin");
+                        httpExchange.sendResponseHeaders(302, -1);
+                        httpExchange.close();
+                        return;
+                    }
+
+                    else if (uri.startsWith("/edit_mentor", adminRoot.length())) {
+                        InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
+                        BufferedReader br = new BufferedReader(isr);
+                        String formData = br.readLine();
+                        Map inputs = parseFormData(formData);
+                        editMentorProcedure(inputs);
+                        Headers responseHeaders = httpExchange.getResponseHeaders();
+                        responseHeaders.add("Location", "/admin");
+                        httpExchange.sendResponseHeaders(302, -1);
+                        httpExchange.close();
+                        return;
+                    }
+                    else if (uri.startsWith("/create_group", adminRoot.length())) {
+                        InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
+                        BufferedReader br = new BufferedReader(isr);
+                        String formData = br.readLine();
+                        Map inputs = parseFormData(formData);
+                        String group = inputs.get("fname").toString();
+                        SchoolController.createGroup(group);
+                        Headers responseHeaders = httpExchange.getResponseHeaders();
+                        responseHeaders.add("Location", "/admin");
+                        httpExchange.sendResponseHeaders(302, -1);
+                        httpExchange.close();
+                        return;
                     }
                 }
-                view.sendResponse(response, httpExchange);
+            }
+            view.sendResponse(response, httpExchange);
             }
         }
 
@@ -123,6 +146,104 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
         String password = inputs.get("password").toString();
         System.out.println(firstName + lastName + password);
         GeneralModelFactory.getByType(MentorFactoryImpl.class).create(firstName, lastName, password);
+    }
+
+    private void editMentorProcedure(Map inputs){
+        String mentorId = inputs.get("fname").toString();
+        Mentor mentor = SchoolController.getMentorByUserChoice(mentorId);
+        System.out.println(mentor.getId());
+        String editWord = inputs.get("password").toString();
+        String option = inputs.get("lname").toString();
+        System.out.println(option + editWord);
+        switch (option) {
+            case "1":
+                String firstName = editWord;
+                mentor.setFirstName(firstName);
+                break;
+            case "2":
+                String lastName = editWord;
+                mentor.setLastName(lastName);
+                break;
+            case "3":
+                String password = editWord;
+                mentor.setPassword(password);
+                break;
+            case "4":
+                String email = editWord;
+                mentor.setEmail(email);
+                break;
+            case "5":
+                SchoolController.editMentorGroup(mentor, editWord);
+//                SchoolController.assignMentorToGroup(mentor);
+                break;
+            case "0":
+                break;
+        }
+    }
+
+    private void editMentor() {
+        Mentor mentor = SchoolController.getMentorByUserChoice();
+        if (mentor != null) {
+            boolean isFinished = false;
+            while (!isFinished) {
+                view.clearScreen();
+                view.displayEditMenu();
+                String userChoice = view.getUserInput("Select an option: ");
+                view.clearScreen();
+                view.displayMessage("Mentor to edit:\n");
+                view.displayUserWithDetails(mentor);
+                view.drawNextLine();
+                switch (userChoice) {
+                    case "1":
+                        String firstName = view.getUserInput("Enter first name: ");
+                        mentor.setFirstName(firstName);
+                        break;
+                    case "2":
+                        String lastName = view.getUserInput("Enter last name: ");
+                        mentor.setLastName(lastName);
+                        break;
+                    case "3":
+                        String password = view.getUserInput("Enter password: ");
+                        mentor.setPassword(password);
+                        break;
+                    case "4":
+                        String email = view.getUserInput("Enter email: ");
+                        mentor.setEmail(email);
+                        break;
+                    case "5":
+                        SchoolController.assignMentorToGroup(mentor);
+                        break;
+                    case "0":
+                        isFinished = true;
+                        break;
+                }
+                if (!isFinished) {
+                    view.clearScreen();
+                    view.displayMessageInNextLine("Mentor`s data:\n");
+                    view.displayUserWithDetails(mentor);
+                    view.handlePause();
+                }
+            }
+        }
+    }
+
+    private void displayMentorProfile() {
+        Mentor mentor = SchoolController.getMentorByUserChoice();
+        if(mentor != null) {
+            view.clearScreen();
+            view.displayMessageInNextLine("Mentor's details:\n");
+            view.displayUserWithDetails(mentor);
+        }
+    }
+
+    private void displayStudentsByMentor() {
+        Mentor mentor = SchoolController.getMentorByUserChoice();
+        if(mentor != null) {
+            view.clearScreen();
+            view.displayMessageInNextLine("Students:\n");
+            List<Student> students = SchoolController.getStudentsByGroup(mentor.getGroup());
+            view.displayObjects(students);
+        }
     }
 
     private void runExpLevelManager(){
