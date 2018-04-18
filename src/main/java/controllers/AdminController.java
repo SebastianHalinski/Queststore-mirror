@@ -53,6 +53,21 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
                         model.with("idNumber", String.valueOf(admin.getId()));
                         model.with("emailAdress", admin.getEmail());
                         response = template.render(model);
+                    } else if (uri.startsWith("/edit_mentor", adminRoot.length())) {
+                        template = JtwigTemplate.classpathTemplate("templates/admin/edit_mentor.twig");
+                        response = template.render(model);
+                    } else if (uri.startsWith("/display_mentor", adminRoot.length())) {
+                        template = JtwigTemplate.classpathTemplate("templates/admin/display_mentor.twig");
+                        response = template.render(model);
+                    } else if (uri.startsWith("/display_students_by_mentor", adminRoot.length())) {
+                        template = JtwigTemplate.classpathTemplate("templates/admin/display_students_by_mentor.twig");
+                        response = template.render(model);
+                    } else if (uri.startsWith("/create_group", adminRoot.length())) {
+                        template = JtwigTemplate.classpathTemplate("templates/admin/create_group.twig");
+                        response = template.render(model);
+                    } else if (uri.startsWith("/createexplvl", adminRoot.length())) {
+                        template = JtwigTemplate.classpathTemplate("templates/admin/create_explvl.twig");
+                        response = template.render(model);
                     } else if (uri.startsWith("/admin", adminRoot.length())) {
                         Headers responseHeaders = httpExchange.getResponseHeaders();
                         responseHeaders.add("Location", "/admin");
