@@ -201,6 +201,10 @@ public class SchoolController {
             }
         }
     }
+    public static void createGroup(String group){
+        GeneralModelFactory.getByType(GroupFactoryImpl.class).create(group);
+    }
+
 
     public static void createNewGroup(){
         boolean isDone = false;

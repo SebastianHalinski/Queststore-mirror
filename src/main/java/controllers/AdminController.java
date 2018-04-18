@@ -122,7 +122,19 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
                     httpExchange.close();
                     return;
                 }
-
+                else if (uri.startsWith("/create_group", adminRoot.length())) {
+                    InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
+                    BufferedReader br = new BufferedReader(isr);
+                    String formData = br.readLine();
+                    Map inputs = parseFormData(formData);
+                    String group = inputs.get("fname").toString();
+                    SchoolController.createGroup(group);
+                    Headers responseHeaders = httpExchange.getResponseHeaders();
+                    responseHeaders.add("Location", "/admin");
+                    httpExchange.sendResponseHeaders(302, -1);
+                    httpExchange.close();
+                    return;
+                }
             }
         }
         view.sendResponse(response, httpExchange);
