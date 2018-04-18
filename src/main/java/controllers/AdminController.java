@@ -11,10 +11,7 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import factory.GeneralModelFactory;
-import model.MentorFactoryImpl;
-import model.Admin;
-import model.Mentor;
-import model.Student;
+import model.*;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import view.AdminView;
@@ -96,7 +93,16 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
         }
         if (method.equals("POST")) {
             //actions
-            response = "PIWO";
+            InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
+            BufferedReader br = new BufferedReader(isr);
+            String formData = br.readLine();
+            Map inputs = parseFormData(formData);
+            createMentorProcedure(inputs);
+            Headers responseHeaders = httpExchange.getResponseHeaders();
+            responseHeaders.add("Location", "/admin");
+            httpExchange.sendResponseHeaders(302, -1);
+            httpExchange.close();
+            return;
         }
         view.sendResponse(response, httpExchange);
     }
@@ -152,7 +158,17 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
         }
     }
 
+    private void createMentorProcedure(Map inputs){
+
+        String firstName = inputs.get("fname").toString();
+        String lastName = inputs.get("lname").toString();
+        String password = inputs.get("password").toString();
+        System.out.println(firstName + lastName + password);
+        GeneralModelFactory.getByType(MentorFactoryImpl.class).create(firstName, lastName, password);
+    }
+
     private void createMentor(){
+
         String firstName = view.getUserInput("Enter first name: ");
         String lastName = view.getUserInput("Enter last name: ");
         String password = view.getUserInput("Enter password: ");
