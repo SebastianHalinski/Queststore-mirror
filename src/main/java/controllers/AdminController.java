@@ -98,6 +98,11 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
             String formData = br.readLine();
             Map inputs = parseFormData(formData);
             createMentorProcedure(inputs);
+            Headers responseHeaders = httpExchange.getResponseHeaders();
+            responseHeaders.add("Location", "/admin");
+            httpExchange.sendResponseHeaders(302, -1);
+            httpExchange.close();
+            return;
         }
         view.sendResponse(response, httpExchange);
     }
