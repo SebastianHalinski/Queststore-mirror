@@ -93,16 +93,28 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
         }
         if (method.equals("POST")) {
             //actions
-            InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
-            BufferedReader br = new BufferedReader(isr);
-            String formData = br.readLine();
-            Map inputs = parseFormData(formData);
-            createMentorProcedure(inputs);
-            Headers responseHeaders = httpExchange.getResponseHeaders();
-            responseHeaders.add("Location", "/admin");
-            httpExchange.sendResponseHeaders(302, -1);
-            httpExchange.close();
-            return;
+            response = template.render(model);
+            String uri = httpExchange.getRequestURI().toString();
+            String adminRoot = "/admin";
+            if (uri.startsWith(adminRoot)){
+                if (uri.startsWith("/create_mentor", adminRoot.length())) {
+                    InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
+                    BufferedReader br = new BufferedReader(isr);
+                    String formData = br.readLine();
+                    Map inputs = parseFormData(formData);
+                    createMentorProcedure(inputs);
+                    Headers responseHeaders = httpExchange.getResponseHeaders();
+                    responseHeaders.add("Location", "/admin");
+                    httpExchange.sendResponseHeaders(302, -1);
+                    httpExchange.close();
+                    return;
+                }
+
+                else if (uri.startsWith("/edit_mentor", adminRoot.length())) {
+
+                }
+
+            }
         }
         view.sendResponse(response, httpExchange);
     }
@@ -133,7 +145,7 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
                     showProfile(admin);
                     break;
                 case "2":
-                    createMentor();
+//                    createMentor();
                     break;
                 case "3":
                     editMentor();
@@ -167,17 +179,17 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
         GeneralModelFactory.getByType(MentorFactoryImpl.class).create(firstName, lastName, password);
     }
 
-    private void createMentor(){
-
-        String firstName = view.getUserInput("Enter first name: ");
-        String lastName = view.getUserInput("Enter last name: ");
-        String password = view.getUserInput("Enter password: ");
-        Mentor mentor = GeneralModelFactory.getByType(MentorFactoryImpl.class)
-                                .create(firstName, lastName, password);
-        view.clearScreen();
-        view.displayMessageInNextLine("Mentor created: \n");
-        view.displayUserWithDetails(mentor);
-    }
+//    private void createMentor(){
+//
+//        String firstName = view.getUserInput("Enter first name: ");
+//        String lastName = view.getUserInput("Enter last name: ");
+//        String password = view.getUserInput("Enter password: ");
+//        Mentor mentor = GeneralModelFactory.getByType(MentorFactoryImpl.class)
+//                                .create(firstName, lastName, password);
+//        view.clearScreen();
+//        view.displayMessageInNextLine("Mentor created: \n");
+//        view.displayUserWithDetails(mentor);
+//    }
 
     private void editMentor() {
         Mentor mentor = SchoolController.getMentorByUserChoice();
