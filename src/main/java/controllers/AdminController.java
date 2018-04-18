@@ -128,6 +128,21 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
                         return;
                     }
                 }
+                else if (uri.startsWith("/createexplvl", adminRoot.length())) {
+                    InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
+                    BufferedReader br = new BufferedReader(isr);
+                    String formData = br.readLine();
+                    Map inputs = parseFormData(formData);
+                    String name = inputs.get("fname").toString();
+                    Integer points = Integer.parseInt(inputs.get("points").toString());
+                    ExperienceLevelsController.getInstance().createExpLevels(name, points);
+//                    SchoolController.createGroup(group);
+                    Headers responseHeaders = httpExchange.getResponseHeaders();
+                    responseHeaders.add("Location", "/admin");
+                    httpExchange.sendResponseHeaders(302, -1);
+                    httpExchange.close();
+                    return;
+                }
             }
             view.sendResponse(response, httpExchange);
             }

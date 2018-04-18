@@ -64,6 +64,10 @@ public class ExperienceLevelsController {
         student.setExperienceLevel(level, nextExpLevel);
     }
 
+    public void createExpLevels(String name, Integer points){
+        experienceLevels.addLevel(name, points);
+    }
+
     public void manageExperienceLevels() {
         while(! shouldExit) {
             view.clearScreen();
