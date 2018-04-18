@@ -17,123 +17,101 @@ import org.jtwig.JtwigTemplate;
 import view.AdminView;
 
 
-
 public class AdminController extends UserControllerImpl implements HttpHandler {
 
-    private Admin admin;
     private AdminView view;
+    private Admin admin;
 
     public AdminController() {
         this.view = new AdminView();
+        admin = null;
     }
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        String response = " ";
-        String method = httpExchange.getRequestMethod();
-        JtwigTemplate template = JtwigTemplate.classpathTemplate("templates/admin/admin.twig");
-        JtwigModel model = JtwigModel.newModel();
+        if (admin == null) {
+            admin = getLoggedAdmin(httpExchange);
+        } else {
+            String response = " ";
+            String method = httpExchange.getRequestMethod();
+            JtwigTemplate template = JtwigTemplate.classpathTemplate("templates/admin/admin.twig");
+            JtwigModel model = JtwigModel.newModel();
 
-        if (method.equals("GET")) {
-            response = template.render(model);
-            String uri = httpExchange.getRequestURI().toString();
-            String adminRoot = "/admin";
-            if (uri.startsWith(adminRoot)) {
-                if (uri.startsWith("/create_mentor", adminRoot.length())) {
-                    template = JtwigTemplate.classpathTemplate("templates/admin/create_mentor.twig");
-                    response = template.render(model);
-                }
+            if (method.equals("GET")) {
+                response = template.render(model);
+                String uri = httpExchange.getRequestURI().toString();
+                String adminRoot = "/admin";
 
-                else if (uri.startsWith("/edit_mentor", adminRoot.length())) {
-                    template = JtwigTemplate.classpathTemplate("templates/admin/edit_mentor.twig");
-                    response = template.render(model);
-                }
-
-
-                else if (uri.startsWith("/display_mentor", adminRoot.length())) {
-                    template = JtwigTemplate.classpathTemplate("templates/admin/display_mentor.twig");
-                    response = template.render(model);
-                }
-
-
-                else if (uri.startsWith("/display_students_by_mentor", adminRoot.length())) {
-                    template = JtwigTemplate.classpathTemplate("templates/admin/display_students_by_mentor.twig");
-                    response = template.render(model);
-                }
-
-
-                else if (uri.startsWith("/create_group", adminRoot.length())) {
-                    template = JtwigTemplate.classpathTemplate("templates/admin/create_group.twig");
-                    response = template.render(model);
-                }
-
-
-                else if (uri.startsWith("/createexplvl", adminRoot.length())) {
-                    template = JtwigTemplate.classpathTemplate("templates/admin/create_explvl.twig");
-                    response = template.render(model);
-                }
-                
-                else if (uri.startsWith("/admin", adminRoot.length())) {
-                    Headers responseHeaders = httpExchange.getResponseHeaders();
-                    responseHeaders.add("Location", "/admin");
-                    httpExchange.sendResponseHeaders(302, -1);
-                    httpExchange.close();
-                    return;
-                }
-
-                else if (uri.startsWith("/login", adminRoot.length())) {
-                    Headers responseHeaders = httpExchange.getResponseHeaders();
-                    responseHeaders.add("Location", "/login");
-                    httpExchange.sendResponseHeaders(302, -1);
-                    httpExchange.close();
-                    return;
-
+                if (uri.startsWith(adminRoot)) {
+                    if (uri.startsWith("/create_mentor", adminRoot.length())) {
+                        template = JtwigTemplate.classpathTemplate("templates/admin/create_mentor.twig");
+                        response = template.render(model);
+                    } else if (uri.startsWith("/admin_details", adminRoot.length())) {
+                        template = JtwigTemplate.classpathTemplate("templates/admin/admin_details.twig");
+                        model.with("adminName", admin.getFullName());
+                        model.with("roleDetail", admin.getRole());
+                        model.with("idNumber", String.valueOf(admin.getId()));
+                        model.with("emailAdress", admin.getEmail());
+                        response = template.render(model);
+                    } else if (uri.startsWith("/admin", adminRoot.length())) {
+                        Headers responseHeaders = httpExchange.getResponseHeaders();
+                        responseHeaders.add("Location", "/admin");
+                        httpExchange.sendResponseHeaders(302, -1);
+                        httpExchange.close();
+                        return;
+                    } else if (uri.startsWith("/login", adminRoot.length())) {
+                        Headers responseHeaders = httpExchange.getResponseHeaders();
+                        responseHeaders.add("Location", "/login");
+                        httpExchange.sendResponseHeaders(302, -1);
+                        httpExchange.close();
+                        return;
+                    }
                 }
             }
-        }
-        if (method.equals("POST")) {
-            //actions
-            response = template.render(model);
-            String uri = httpExchange.getRequestURI().toString();
-            String adminRoot = "/admin";
-            if (uri.startsWith(adminRoot)){
-                if (uri.startsWith("/create_mentor", adminRoot.length())) {
-                    InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
-                    BufferedReader br = new BufferedReader(isr);
-                    String formData = br.readLine();
-                    Map inputs = parseFormData(formData);
-                    createMentorProcedure(inputs);
-                    Headers responseHeaders = httpExchange.getResponseHeaders();
-                    responseHeaders.add("Location", "/admin");
-                    httpExchange.sendResponseHeaders(302, -1);
-                    httpExchange.close();
-                    return;
-                }
+            if (method.equals("POST")) {
+                //actions
+                response = template.render(model);
+                String uri = httpExchange.getRequestURI().toString();
+                String adminRoot = "/admin";
+                if (uri.startsWith(adminRoot)){
+                    if (uri.startsWith("/create_mentor", adminRoot.length())) {
+                        InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
+                        BufferedReader br = new BufferedReader(isr);
+                        String formData = br.readLine();
+                        Map inputs = parseFormData(formData);
+                        createMentorProcedure(inputs);
+                        Headers responseHeaders = httpExchange.getResponseHeaders();
+                        responseHeaders.add("Location", "/admin");
+                        httpExchange.sendResponseHeaders(302, -1);
+                        httpExchange.close();
+                        return;
+                    }
 
-                else if (uri.startsWith("/edit_mentor", adminRoot.length())) {
-                    InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
-                    BufferedReader br = new BufferedReader(isr);
-                    String formData = br.readLine();
-                    Map inputs = parseFormData(formData);
-                    editMentorProcedure(inputs);
-                    Headers responseHeaders = httpExchange.getResponseHeaders();
-                    responseHeaders.add("Location", "/admin");
-                    httpExchange.sendResponseHeaders(302, -1);
-                    httpExchange.close();
-                    return;
-                }
-                else if (uri.startsWith("/create_group", adminRoot.length())) {
-                    InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
-                    BufferedReader br = new BufferedReader(isr);
-                    String formData = br.readLine();
-                    Map inputs = parseFormData(formData);
-                    String group = inputs.get("fname").toString();
-                    SchoolController.createGroup(group);
-                    Headers responseHeaders = httpExchange.getResponseHeaders();
-                    responseHeaders.add("Location", "/admin");
-                    httpExchange.sendResponseHeaders(302, -1);
-                    httpExchange.close();
-                    return;
+                    else if (uri.startsWith("/edit_mentor", adminRoot.length())) {
+                        InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
+                        BufferedReader br = new BufferedReader(isr);
+                        String formData = br.readLine();
+                        Map inputs = parseFormData(formData);
+                        editMentorProcedure(inputs);
+                        Headers responseHeaders = httpExchange.getResponseHeaders();
+                        responseHeaders.add("Location", "/admin");
+                        httpExchange.sendResponseHeaders(302, -1);
+                        httpExchange.close();
+                        return;
+                    }
+                    else if (uri.startsWith("/create_group", adminRoot.length())) {
+                        InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
+                        BufferedReader br = new BufferedReader(isr);
+                        String formData = br.readLine();
+                        Map inputs = parseFormData(formData);
+                        String group = inputs.get("fname").toString();
+                        SchoolController.createGroup(group);
+                        Headers responseHeaders = httpExchange.getResponseHeaders();
+                        responseHeaders.add("Location", "/admin");
+                        httpExchange.sendResponseHeaders(302, -1);
+                        httpExchange.close();
+                        return;
+                    }
                 }
                 else if (uri.startsWith("/createexplvl", adminRoot.length())) {
                     InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
@@ -151,8 +129,19 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
                     return;
                 }
             }
+            view.sendResponse(response, httpExchange);
+            }
         }
-        view.sendResponse(response, httpExchange);
+
+    private Admin getLoggedAdmin(HttpExchange httpExchange) throws IOException {
+        String adminRoot = "/admin?";
+        String uri = httpExchange.getRequestURI().toString();
+        int id = Integer.parseInt(uri.substring(adminRoot.length(), uri.length()));
+        Headers requestHeaders = httpExchange.getResponseHeaders();
+        requestHeaders.add("Location", "/admin");
+        httpExchange.sendResponseHeaders(302,-1);
+        httpExchange.close();
+        return ModelDaoFactory.getByType(AdminDAO.class).getModelById(id);
     }
 
     private static Map<String, String> parseFormData(String formData) throws UnsupportedEncodingException {
@@ -166,66 +155,13 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
         return map;
     }
 
-    public void executeMainMenu(){
-
-        boolean isDone = false;
-        while(! isDone) {
-            String[] correctChoices = {"1", "2", "3", "4", "5", "6", "7", "0"};
-            view.clearScreen();
-            view.displayMenu();
-            String userChoice = view.getMenuChoice(correctChoices);
-            view.clearScreen();
-
-            switch(userChoice) {
-                case "1":
-                    showProfile(admin);
-                    break;
-                case "2":
-//                    createMentor();
-                    break;
-                case "3":
-                    editMentor();
-                    break;
-                case "4":
-                    displayMentorProfile();
-                    break;
-                case "5":
-                    displayStudentsByMentor();
-                    break;
-                case "6":
-                    SchoolController.createNewGroup();
-                    break;
-                case "7":
-                    runExpLevelManager();
-                    break;
-                case "0":
-                    isDone = true;
-                    break;
-            }
-            view.handlePause();
-        }
-    }
-
     private void createMentorProcedure(Map inputs){
-
         String firstName = inputs.get("fname").toString();
         String lastName = inputs.get("lname").toString();
         String password = inputs.get("password").toString();
         System.out.println(firstName + lastName + password);
         GeneralModelFactory.getByType(MentorFactoryImpl.class).create(firstName, lastName, password);
     }
-
-//    private void createMentor(){
-//
-//        String firstName = view.getUserInput("Enter first name: ");
-//        String lastName = view.getUserInput("Enter last name: ");
-//        String password = view.getUserInput("Enter password: ");
-//        Mentor mentor = GeneralModelFactory.getByType(MentorFactoryImpl.class)
-//                                .create(firstName, lastName, password);
-//        view.clearScreen();
-//        view.displayMessageInNextLine("Mentor created: \n");
-//        view.displayUserWithDetails(mentor);
-//    }
 
     private void editMentorProcedure(Map inputs){
         String mentorId = inputs.get("fname").toString();
