@@ -111,7 +111,16 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
                 }
 
                 else if (uri.startsWith("/edit_mentor", adminRoot.length())) {
-
+                    InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
+                    BufferedReader br = new BufferedReader(isr);
+                    String formData = br.readLine();
+                    Map inputs = parseFormData(formData);
+                    editMentorProcedure(inputs);
+                    Headers responseHeaders = httpExchange.getResponseHeaders();
+                    responseHeaders.add("Location", "/admin");
+                    httpExchange.sendResponseHeaders(302, -1);
+                    httpExchange.close();
+                    return;
                 }
 
             }
@@ -190,6 +199,39 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
 //        view.displayMessageInNextLine("Mentor created: \n");
 //        view.displayUserWithDetails(mentor);
 //    }
+
+    private void editMentorProcedure(Map inputs){
+        String mentorId = inputs.get("fname").toString();
+        Mentor mentor = SchoolController.getMentorByUserChoice(mentorId);
+        System.out.println(mentor.getId());
+        String editWord = inputs.get("password").toString();
+        String option = inputs.get("lname").toString();
+        System.out.println(option + editWord);
+        switch (option) {
+            case "1":
+                String firstName = editWord;
+                mentor.setFirstName(firstName);
+                break;
+            case "2":
+                String lastName = editWord;
+                mentor.setLastName(lastName);
+                break;
+            case "3":
+                String password = editWord;
+                mentor.setPassword(password);
+                break;
+            case "4":
+                String email = editWord;
+                mentor.setEmail(email);
+                break;
+            case "5":
+                SchoolController.editMentorGroup(mentor, editWord);
+//                SchoolController.assignMentorToGroup(mentor);
+                break;
+            case "0":
+                break;
+        }
+    }
 
     private void editMentor() {
         Mentor mentor = SchoolController.getMentorByUserChoice();
