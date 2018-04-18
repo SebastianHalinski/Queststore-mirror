@@ -7,70 +7,92 @@ import dao.LoginDAO;
 import dao.SpecialDaoFactory;
 import exceptions.LoginFailure;
 import model.Mentor;
+import model.User;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
+import view.UsersView;
 
 import java.io.*;
+import java.net.HttpCookie;
 import java.net.URLDecoder;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class LoginController implements HttpHandler {
+    private UsersView view;
+    private List<User> loggedUsers = new ArrayList<>();
+    private HttpCookie cookie;
+
+    LoginController() {
+        view = new UsersView();
+    }
+
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        //cookie = createSessionCookie(httpExchange);
-        String response = "";
+        cookie = createSessionCookie(httpExchange);
+        User loggedUser = getLoggedUsserAccount(cookie);
+        String response;
         String method = httpExchange.getRequestMethod();
-        //User user = getLoggedUsserAccount(cookie);
         JtwigTemplate template = JtwigTemplate.classpathTemplate("templates/login.twig");
         JtwigModel model = JtwigModel.newModel();
 
-
-
         if (method.equals("GET")) {
             response = template.render(model);
-            sendResponse(response, httpExchange);
-        }
+            view.sendResponse(response, httpExchange);
+            }
+
         if (method.equals("POST")) {
             InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
             BufferedReader br = new BufferedReader(isr);
             String formData = br.readLine();
             Map inputs = parseFormData(formData);
-            UserController controller = loggingProcedure(inputs);
+            loggedUser = loggingProcedure(inputs, loggedUser);
             Headers headers = httpExchange.getResponseHeaders();
 
-            if(controller.getClass() == AdminController.class) {
+            if(loggedUser.getRole().equals("admin")) {
                 headers.set("Location", "admin");
-            } else if(controller.getClass() == MentorController.class) {
+            } else if(loggedUser.getRole().equals("mentor")) {
                 headers.set("Location", "mentor");
-            } else if(controller.getClass() == StudentController.class) {
+            } else if(loggedUser.getRole().equals("student")) {
                 headers.set("Location", "student");
             }
             httpExchange.sendResponseHeaders(302, -1);
         }
     }
 
-    private UserController loggingProcedure(Map inputs) {
+    private User loggingProcedure(Map inputs, User user) {
         String login = inputs.get("uname").toString();
         String password = inputs.get("psw").toString();
-        UserController controller = null;
+
         try {
-            controller = SpecialDaoFactory.getByType(LoginDAO.class).getUserControllerByLoginAndPassword(login, password);
+            user = SpecialDaoFactory.getByType(LoginDAO.class).getUserByLoginAndPassword(login, password);
+            System.out.println(user);
+            loggedUsers.add(user);
         } catch (LoginFailure ex) {
             System.out.println("Login failed");
         }
-        return controller;
+        return user;
     }
 
-    private void sendResponse(String response, HttpExchange httpExchange) {
-        try {
-            httpExchange.sendResponseHeaders(200, response.length());
-            OutputStream os = httpExchange.getResponseBody();
-            os.write(response.getBytes());
-            os.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+    private User getLoggedUsserAccount(HttpCookie cookie) {
+        for(User user : loggedUsers) {
+            if(cookie.toString().equals(user.getSessionId())){
+                return user;
+            }
         }
+        return null;
+    }
+
+    private HttpCookie createSessionCookie(HttpExchange httpExchange) {
+        String cookieStr = httpExchange.getRequestHeaders().getFirst("Cookie");
+        HttpCookie cookie;
+        if (cookieStr != null) {  // Cookie already exists
+            cookie = HttpCookie.parse(cookieStr).get(0);
+        }
+        else {
+            cookie = new HttpCookie("sessionId", UUID.randomUUID().toString());
+            httpExchange.getResponseHeaders().add("Set-Cookie", cookie.toString());
+        }
+        return cookie;
     }
 
     private static Map<String, String> parseFormData(String formData) throws UnsupportedEncodingException {

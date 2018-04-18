@@ -2,11 +2,12 @@ package dao;
 
 import controllers.UserController;
 import exceptions.LoginFailure;
+import model.User;
 
 
 public interface LoginDAO extends SpecialDAO {
 
-    UserController getUserControllerByLoginAndPassword(String login, String password) throws LoginFailure;
+    User getUserByLoginAndPassword(String login, String password) throws LoginFailure;
 }
 
 

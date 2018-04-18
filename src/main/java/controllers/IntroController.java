@@ -4,11 +4,18 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
+import view.UsersView;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
 public class IntroController implements HttpHandler {
+
+    private UsersView view;
+
+     IntroController() {
+        this.view = new UsersView();
+    }
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         String response = "";
@@ -18,17 +25,6 @@ public class IntroController implements HttpHandler {
         if (method.equals("GET")) {
             response = template.render(model);
         }
-        sendResponse(response, httpExchange);
-    }
-
-    private void sendResponse(String response, HttpExchange httpExchange) {
-        try {
-            httpExchange.sendResponseHeaders(200, response.length());
-            OutputStream os = httpExchange.getResponseBody();
-            os.write(response.getBytes());
-            os.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        view.sendResponse(response, httpExchange);
     }
 }

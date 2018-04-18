@@ -20,7 +20,7 @@ public class LoginDAOImpl implements LoginDAO {
         this.connection = connection;
     }
 
-    public UserController getUserControllerByLoginAndPassword(String login, String password) throws LoginFailure {
+    public User getUserByLoginAndPassword(String login, String password) throws LoginFailure {
         User user;
         String [] usersTables = {Table.ADMINS.getName(), Table.MENTORS.getName(), Table.STUDENTS.getName()};
         String statement;
@@ -35,7 +35,7 @@ public class LoginDAOImpl implements LoginDAO {
                     String[] userData = SQLProcessManager.getObjectData(resultSet);
                     user = extractUser(userData, table);
                     if (user != null) {
-                        return UserControllerFactory.getController(user);
+                        return user;
                     }
                 }
             } catch (SQLException e) {

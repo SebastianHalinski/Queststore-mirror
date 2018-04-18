@@ -1,9 +1,9 @@
 package controllers;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
+import java.net.URI;
+import java.net.URLDecoder;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,12 +39,31 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
 
         if (method.equals("GET")) {
             response = template.render(model);
+            String uri = httpExchange.getRequestURI().toString();
+            final String adminRoot = "/admin";
+            if (uri.startsWith(adminRoot)) {
+                if (uri.startsWith("/create_mentor", adminRoot.length())) {
+                    template = JtwigTemplate.classpathTemplate("templates/admin/create_mentor.twig");
+                    response = template.render(model);
+                }
+            }
         }
         if (method.equals("POST")) {
             //actions
             response = "PIWO";
         }
         view.sendResponse(response, httpExchange);
+    }
+
+    private static Map<String, String> parseFormData(String formData) throws UnsupportedEncodingException {
+        Map<String, String> map = new HashMap<>();
+        String[] pairs = formData.split("&");
+        for (String pair : pairs) {
+            String[] keyValue = pair.split("=");
+            String value = new URLDecoder().decode(keyValue[1], "UTF-8");
+            map.put(keyValue[0], value);
+        }
+        return map;
     }
 
     public void executeMainMenu(){
