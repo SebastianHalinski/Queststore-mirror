@@ -75,7 +75,7 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
                     template = JtwigTemplate.classpathTemplate("templates/admin/create_explvl.twig");
                     response = template.render(model);
                 }
-                
+
                 else if (uri.startsWith("/admin", adminRoot.length())) {
                     Headers responseHeaders = httpExchange.getResponseHeaders();
                     responseHeaders.add("Location", "/admin");
