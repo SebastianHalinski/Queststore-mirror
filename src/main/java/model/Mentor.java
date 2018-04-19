@@ -24,6 +24,10 @@ public class Mentor extends User {
         return group;
     }
 
+    public String getGroupName(){
+        return group.getName();
+    }
+
     public void setGroup(Group group) {
         this.group = group;
         saveModel();

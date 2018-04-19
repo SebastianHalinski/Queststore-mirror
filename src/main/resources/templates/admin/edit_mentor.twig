@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/static/css/input_style.css">
     <link rel="stylesheet" href="/static/css/button.css">
     <link rel="stylesheet" href="/static/css/content_header.css">
+      <link rel="stylesheet" href="/static/css/ul.css">
     <meta charset="utf-8">
     <title>Admin page</title>
     <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
@@ -19,15 +20,23 @@
   {% include "admin_panel.twig" %}
 
 	<div class="createPanel, responsive_text">
-        <h3 class="content_header">Create mentor</h3>
+        <h3 class="content_header">Edit mentor</h3>
 
-         <h4>To edit mentor fill the form:</h4>
-         <p>    Options:
-             [1] edit first name,
-                [2] edit last name,
-                [3] edit password,
-                [4] edit email,
-                [5] edit group</p>
+        <h4>Mentor list:</h4>
+        <ol>
+        {% for mentor in mentorList %}
+            <li>{{ mentor.getFullName() }} id: {{ mentor.getId() }}</li>
+        {% endfor %}
+        </ol>
+         <h4>After choosing a mentor - choose an option:</h4>
+         <ol>
+
+             <li>edit first name</li>
+             <li>edit last name</li>
+             <li>edit password</li>
+             <li>edit email</li>
+             <li>edit group</li>
+         </ol>
          <form method="POST">
            <div class="row">
              <div class="col-25">

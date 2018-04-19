@@ -21,20 +21,27 @@
     <div class="createPanel, responsive_text">
      <h3 class="content_header">Display students by mentor</h3>
 
+      <h4>Mentor list:</h4>
+      <ol>
+          {% for mentor in mentorList %}
+            <li>{{ mentor.getFullName() }} id: {{ mentor.getId() }}</li>
+          {% endfor %}
+      </ol>
+
       <h4>To display students fill the form:</h4>
 
-      <form>
+      <form method="POST">
         <div class="row">
           <div class="col-25">
             <label for="fname">Mentor Id</label>
           </div>
           <div class="col-75">
-            <input type="text" id="fname" name="fname">
+            <input type="text" id="mentorId" name="mentorId">
           </div>
         </div>
 
           <div class="row">
-            <a class="button" href="search_student"> Show</a>
+            <button class="button" type="submit"> Show</button>
           </div>
         </div>
       </form>

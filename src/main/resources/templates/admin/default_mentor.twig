@@ -4,6 +4,8 @@
 
     <link rel="stylesheet" href="/static/css/student_details.css">
     <link rel="stylesheet" type="text/css" href="/static/css/admin_panel.css">
+      <link rel="stylesheet" href="/static/css/content_header.css">
+      <link rel="stylesheet" href="/static/css/responsive_panel.css">
     <meta charset="utf-8">
     <title>Student page</title>
     <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
@@ -13,22 +15,20 @@
   </head>
   <body>
 
+  {% include "admin_panel.twig" %}
 
-    <div class="content">
-      <h2>Mentor details</h2>
-      <hr>
+    <div class="content, responsive_text">
+      <h3 class="content_header">Mentor details</h3>
+
       <div class="details">
-          <h3>Fullname: {{ mentorName }}</h3>
-          <h3>Role: {{ role }}</h3>
-          <h3>ID: {{ idNumber }}</h3>
-          <h3>Email: {{ emailAdress }}</h3>
-          <hr>
-          <h3>Group: {{ groupName }}</h3>
-          <h3>Team: {{ teamName }}</h3>
-          <hr>
+          <p>Fullname: {{ mentorName }}</p>
+          <p>Role: {{ role }}</p>
+          <p>ID: {{ idNumber }}</p>
+          <p>Email: {{ emailAddress }}</p>
+          <p>Group: {{ groupName }}</p>
       </div>
-
+    </div>
   </body>
 
-  {% include "admin_panel.twig" %}
+
   </html>

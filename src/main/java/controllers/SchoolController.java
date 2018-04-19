@@ -152,26 +152,9 @@ public class SchoolController {
     }
 
     public static Mentor getMentorByUserChoice(String mentorId) {
-        UsersView view = new UsersView();
         List<Mentor> mentors = getAllMentors();
-        view.displayMessageInNextLine("Mentors:\n");
-        view.displayObjects(mentors);
-        view.drawNextLine();
         return mentors.stream()
                 .filter(m -> String.valueOf(m.getId()).equals(mentorId))
-                .findAny()
-                .orElse(null);
-    }
-
-    public static Mentor getMentorByUserChoice() {
-        UsersView view = new UsersView();
-        List<Mentor> mentors = getAllMentors();
-        view.displayMessageInNextLine("Mentors:\n");
-        view.displayObjects(mentors);
-        String id = view.getUserInput("Select mentor by id: ");
-        view.drawNextLine();
-        return mentors.stream()
-                .filter(m -> String.valueOf(m.getId()).equals(id))
                 .findAny()
                 .orElse(null);
     }
