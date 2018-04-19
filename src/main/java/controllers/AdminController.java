@@ -1,8 +1,6 @@
 package controllers;
 
 import java.io.*;
-import java.net.HttpCookie;
-import java.net.URI;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +14,6 @@ import model.*;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import view.AdminView;
-
 
 public class AdminController extends UserControllerImpl implements HttpHandler {
 
@@ -90,15 +87,12 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
             else if (uri.startsWith("/display_mentor", adminRoot.length())) {
                 response = dispalyMentor(httpExchange);
             }
-
             else if (uri.startsWith("/display_students_by_mentor", adminRoot.length())) {
                 response = displayStudentsByMentor(httpExchange, model);
-
             }
         }
         view.sendResponse(response, httpExchange);
     }
-
 
     private void getPageManager(Admin admin, String uri, String adminRoot, String response, JtwigTemplate template, JtwigModel model, HttpExchange httpExchange ) throws IOException {
         if (uri.startsWith(adminRoot)) {
@@ -247,7 +241,6 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
         GeneralModelFactory.getByType(MentorFactoryImpl.class).create(firstName, lastName, password);
     }
 
-
     private void editMentorProcedure(Map inputs){
         String mentorId = inputs.get("fname").toString();
         Mentor mentor = SchoolController.getMentorByUserChoice(mentorId);
@@ -278,7 +271,6 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
         }
     }
 
-
     private Mentor displayMentorProcedure(Map inputs){
         String mentorId = inputs.get("mentorId").toString();
         return SchoolController.getMentorByUserChoice(mentorId);
@@ -288,5 +280,4 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
     private List<Student> displayStudentsByMentor(Mentor mentor){
         return SchoolController.getStudentsByGroup(mentor.getGroup());
     }
-
 }
