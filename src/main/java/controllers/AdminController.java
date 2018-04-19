@@ -93,9 +93,11 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
         }
         if (method.equals("POST")) {
             //actions
+
             response = template.render(model);
             String uri = httpExchange.getRequestURI().toString();
             String adminRoot = "/admin";
+
             if (uri.startsWith(adminRoot)){
                 if (uri.startsWith("/create_mentor", adminRoot.length())) {
                     InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
@@ -111,6 +113,36 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
                 }
 
                 else if (uri.startsWith("/edit_mentor", adminRoot.length())) {
+
+                }
+
+                else if (uri.startsWith("/display_mentor", adminRoot.length())) {
+                    InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
+                    BufferedReader br = new BufferedReader(isr);
+                    String formData = br.readLine();
+                    Map inputs = parseFormData(formData);
+                    Mentor mentor = displayMentorProcedure(inputs);
+                    template = JtwigTemplate.classpathTemplate("templates/admin/default_mentor.twig");
+                    model = JtwigModel.newModel();
+                    model.with("mentorName", mentor.getFullName());
+                    model.with("role", mentor.getRole());
+                    model.with("idNumber", mentor.getId());
+                    model.with("emailAddress", mentor.getEmail());
+                    model.with("groupName", mentor.getGroupName());
+                    response = template.render(model);
+                }
+
+                else if (uri.startsWith("/display_students_by_mentor", adminRoot.length())) {
+                    InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
+                    BufferedReader br = new BufferedReader(isr);
+                    String formData = br.readLine();
+                    Map inputs = parseFormData(formData);
+                    Mentor mentor = displayMentorProcedure(inputs);
+                    List<Student> students = displayStudentsByMentor(mentor);
+                    template = JtwigTemplate.classpathTemplate("templates/admin/default_students.twig");
+                    model.with("studentList", students);
+                    model.with("groupName", mentor.getGroupName());
+                    response = template.render(model);
 
                 }
 
@@ -130,45 +162,6 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
         return map;
     }
 
-    public void executeMainMenu(){
-
-        boolean isDone = false;
-        while(! isDone) {
-            String[] correctChoices = {"1", "2", "3", "4", "5", "6", "7", "0"};
-            view.clearScreen();
-            view.displayMenu();
-            String userChoice = view.getMenuChoice(correctChoices);
-            view.clearScreen();
-
-            switch(userChoice) {
-                case "1":
-                    showProfile(admin);
-                    break;
-                case "2":
-//                    createMentor();
-                    break;
-                case "3":
-                    editMentor();
-                    break;
-                case "4":
-                    displayMentorProfile();
-                    break;
-                case "5":
-                    displayStudentsByMentor();
-                    break;
-                case "6":
-                    SchoolController.createNewGroup();
-                    break;
-                case "7":
-                    runExpLevelManager();
-                    break;
-                case "0":
-                    isDone = true;
-                    break;
-            }
-            view.handlePause();
-        }
-    }
 
     private void createMentorProcedure(Map inputs){
 
@@ -179,82 +172,28 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
         GeneralModelFactory.getByType(MentorFactoryImpl.class).create(firstName, lastName, password);
     }
 
-//    private void createMentor(){
-//
-//        String firstName = view.getUserInput("Enter first name: ");
-//        String lastName = view.getUserInput("Enter last name: ");
-//        String password = view.getUserInput("Enter password: ");
-//        Mentor mentor = GeneralModelFactory.getByType(MentorFactoryImpl.class)
-//                                .create(firstName, lastName, password);
-//        view.clearScreen();
-//        view.displayMessageInNextLine("Mentor created: \n");
-//        view.displayUserWithDetails(mentor);
+
+
+    private Mentor displayMentorProcedure(Map inputs){
+        String mentorId = inputs.get("mentorId").toString();
+        return SchoolController.getMentorByUserChoice(mentorId);
+
+    }
+
+    private List<Student> displayStudentsByMentor(Mentor mentor){
+        return SchoolController.getStudentsByGroup(mentor.getGroup());
+    }
+
+
+//    private void displayStudentsByMentor() {
+//        Mentor mentor = SchoolController.getMentorByUserChoice();
+//        if(mentor != null) {
+//            view.clearScreen();
+//            view.displayMessageInNextLine("Students:\n");
+//            List<Student> students = SchoolController.getStudentsByGroup(mentor.getGroup());
+//            view.displayObjects(students);
+//        }
 //    }
-
-    private void editMentor() {
-        Mentor mentor = SchoolController.getMentorByUserChoice();
-        if (mentor != null) {
-            boolean isFinished = false;
-            while (!isFinished) {
-                view.clearScreen();
-                view.displayEditMenu();
-                String userChoice = view.getUserInput("Select an option: ");
-                view.clearScreen();
-                view.displayMessage("Mentor to edit:\n");
-                view.displayUserWithDetails(mentor);
-                view.drawNextLine();
-                switch (userChoice) {
-                    case "1":
-                        String firstName = view.getUserInput("Enter first name: ");
-                        mentor.setFirstName(firstName);
-                        break;
-                    case "2":
-                        String lastName = view.getUserInput("Enter last name: ");
-                        mentor.setLastName(lastName);
-                        break;
-                    case "3":
-                        String password = view.getUserInput("Enter password: ");
-                        mentor.setPassword(password);
-                        break;
-                    case "4":
-                        String email = view.getUserInput("Enter email: ");
-                        mentor.setEmail(email);
-                        break;
-                    case "5":
-                        SchoolController.assignMentorToGroup(mentor);
-                        break;
-                    case "0":
-                        isFinished = true;
-                        break;
-                }
-                if (!isFinished) {
-                    view.clearScreen();
-                    view.displayMessageInNextLine("Mentor`s data:\n");
-                    view.displayUserWithDetails(mentor);
-                    view.handlePause();
-                }
-            }
-        }
-    }
-
-    private void displayMentorProfile() {
-        Mentor mentor = SchoolController.getMentorByUserChoice();
-        if(mentor != null) {
-            view.clearScreen();
-            view.displayMessageInNextLine("Mentor's details:\n");
-            view.displayUserWithDetails(mentor);
-        }
-    }
-
-    private void displayStudentsByMentor() {
-        Mentor mentor = SchoolController.getMentorByUserChoice();
-        if(mentor != null) {
-            view.clearScreen();
-            view.displayMessageInNextLine("Students:\n");
-            List<Student> students = SchoolController.getStudentsByGroup(mentor.getGroup());
-            view.displayObjects(students);
-        }
-    }
 
     private void runExpLevelManager(){
         ExperienceLevelsController.getInstance().manageExperienceLevels();

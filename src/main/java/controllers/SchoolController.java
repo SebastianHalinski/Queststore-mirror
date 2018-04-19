@@ -145,15 +145,11 @@ public class SchoolController {
         return GeneralModelFactory.getByType(TeamFactoryImpl.class).getDefault();
     }
 
-    public static Mentor getMentorByUserChoice() {
-        UsersView view = new UsersView();
+    public static Mentor getMentorByUserChoice(String mentorId) {
+
         List<Mentor> mentors = getAllMentors();
-        view.displayMessageInNextLine("Mentors:\n");
-        view.displayObjects(mentors);
-        String id = view.getUserInput("Select mentor by id: ");
-        view.drawNextLine();
         return mentors.stream()
-                .filter(m -> String.valueOf(m.getId()).equals(id))
+                .filter(m -> String.valueOf(m.getId()).equals(mentorId))
                 .findAny()
                 .orElse(null);
     }

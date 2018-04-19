@@ -20,14 +20,14 @@
       <h2>Students details</h2>
       <hr>
       <div class="team">
-        <h3>Team name: Random</h3>
+        <h3>Group name: {{ groupName }}</h3>
         <ol>
-          {% for student in studentList
-          if teamName == student.teamName%}
-          <li>student.getName(), role: student id: student.getId(), email: student.getEmail()</li>
+          {% for student in studentList %}
+          <li> {{ student.getFullName() }}, role: student id: {{ student.getId() }}, email: {{student.getEmail()}}</li>
+          {% endfor %}
         </ol>
       </div>
-
+    </div>
   </body>
 
 
