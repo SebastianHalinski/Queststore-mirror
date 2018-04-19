@@ -6,7 +6,6 @@ import com.sun.net.httpserver.HttpHandler;
 import dao.LoginDAO;
 import dao.SpecialDaoFactory;
 import exceptions.LoginFailure;
-import model.Mentor;
 import model.User;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
@@ -28,14 +27,12 @@ public class LoginController implements HttpHandler  {
     public void handle(HttpExchange httpExchange) throws IOException {
         User user = null;
         HttpCookie cookie = createSessionCookie(httpExchange);
-        System.out.println(cookie);
-        String response;
         String method = httpExchange.getRequestMethod();
         JtwigTemplate template = JtwigTemplate.classpathTemplate("templates/login.twig");
         JtwigModel model = JtwigModel.newModel();
 
         if (method.equals("GET")) {
-            response = template.render(model);
+            String response = template.render(model);
             view.sendResponse(response, httpExchange);
             }
 
@@ -62,7 +59,6 @@ public class LoginController implements HttpHandler  {
     private User loggingProcedure(Map inputs, User user, HttpCookie cookie) {
         String login = inputs.get("uname").toString();
         String password = inputs.get("psw").toString();
-
         try {
             user = SpecialDaoFactory.getByType(LoginDAO.class).getUserByLoginAndPassword(login, password);
             user.setSessionId(cookie.toString());
