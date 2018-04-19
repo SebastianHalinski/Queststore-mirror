@@ -36,10 +36,10 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
             String method = httpExchange.getRequestMethod();
             JtwigTemplate template = JtwigTemplate.classpathTemplate("templates/admin/admin.twig");
             JtwigModel model = JtwigModel.newModel();
+            model.with("userName", admin.getFullName());
 
             if (method.equals("GET")) {
                 response = template.render(model);
-                model.with("userName", admin.getFullName());
                 String uri = httpExchange.getRequestURI().toString();
                 String adminRoot = "/admin";
 
@@ -132,7 +132,6 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
                         String name = inputs.get("fname").toString();
                         Integer points = Integer.parseInt(inputs.get("points").toString());
                         ExperienceLevelsController.getInstance().createExpLevels(name, points);
-//                    SchoolController.createGroup(group);
                         Headers responseHeaders = httpExchange.getResponseHeaders();
                         responseHeaders.add("Location", "/admin");
                         httpExchange.sendResponseHeaders(302, -1);
@@ -140,10 +139,10 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
                         return;
                     }
                 }
-                view.sendResponse(response, httpExchange);
+            }
+            view.sendResponse(response, httpExchange);
             }
         }
-    }
 
     private Admin getLoggedAdmin(HttpExchange httpExchange) throws IOException {
         String adminRoot = "/admin?";
