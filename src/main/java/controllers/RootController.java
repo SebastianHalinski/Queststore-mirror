@@ -33,7 +33,6 @@ public class RootController {
     public void runApplication(){
         try {
             HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
-
             server.createContext("/static", new Static());
             server.createContext("/login", new LoginController());
             server.createContext("/", new IntroController());

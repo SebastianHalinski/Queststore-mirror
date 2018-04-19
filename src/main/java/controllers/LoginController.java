@@ -17,7 +17,7 @@ import java.net.HttpCookie;
 import java.net.URLDecoder;
 import java.util.*;
 
-public class LoginController implements HttpHandler {
+public class LoginController implements HttpHandler  {
     private UsersView view;
     private List<User> loggedUsers = new ArrayList<>();
     private HttpCookie cookie;
@@ -49,7 +49,7 @@ public class LoginController implements HttpHandler {
             Headers headers = httpExchange.getResponseHeaders();
 
             if(loggedUser.getRole().equals("admin")) {
-                headers.set("Location", "admin");
+                headers.set("Location", "admin?"+ loggedUser.getId());
             } else if(loggedUser.getRole().equals("mentor")) {
                 headers.set("Location", "mentor");
             } else if(loggedUser.getRole().equals("student")) {
@@ -65,7 +65,6 @@ public class LoginController implements HttpHandler {
 
         try {
             user = SpecialDaoFactory.getByType(LoginDAO.class).getUserByLoginAndPassword(login, password);
-            System.out.println(user);
             loggedUsers.add(user);
         } catch (LoginFailure ex) {
             System.out.println("Login failed");

@@ -12,7 +12,6 @@ import view.UsersView;
 
 public abstract class  UserControllerImpl implements UserController {
 
-
     protected <T extends User> void showProfile(T user){
         UsersView view = new UsersView();
         view.displayUserWithDetails(user);

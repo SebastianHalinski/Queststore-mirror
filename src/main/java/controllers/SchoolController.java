@@ -3,6 +3,7 @@ package controllers;
 import dao.SchoolDAO;
 import dao.SpecialDaoFactory;
 import factory.GeneralModelFactory;
+import factory.ModelFactory;
 import model.*;
 import view.SchoolView;
 import view.UsersView;
@@ -26,6 +27,11 @@ public class SchoolController {
 
     public static List<String> getTeamNames() {
         return SpecialDaoFactory.getByType(SchoolDAO.class).getTeamNames();
+    }
+
+    public static void editMentorGroup(Mentor mentor, String group){
+        Group newGroup = GeneralModelFactory.getByType(GroupFactoryImpl.class).create(group);
+        mentor.setGroup(newGroup);
     }
 
     public static void assignMentorToGroup(Mentor mentor){
@@ -146,7 +152,6 @@ public class SchoolController {
     }
 
     public static Mentor getMentorByUserChoice(String mentorId) {
-
         List<Mentor> mentors = getAllMentors();
         return mentors.stream()
                 .filter(m -> String.valueOf(m.getId()).equals(mentorId))
@@ -179,6 +184,10 @@ public class SchoolController {
             }
         }
     }
+    public static void createGroup(String group){
+        GeneralModelFactory.getByType(GroupFactoryImpl.class).create(group);
+    }
+
 
     public static void createNewGroup(){
         boolean isDone = false;
