@@ -59,13 +59,22 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
                         response = template.render(model);
                     } else if (uri.startsWith("/edit_mentor", adminRoot.length())) {
                         template = JtwigTemplate.classpathTemplate("templates/admin/edit_mentor.twig");
+                        List<Mentor> mentorList = ModelDaoFactory.getByType(MentorDAO.class).getAllModels();
+                        model.with("mentorList", mentorList);
                         response = template.render(model);
+
                     } else if (uri.startsWith("/display_mentor", adminRoot.length())) {
                         template = JtwigTemplate.classpathTemplate("templates/admin/display_mentor.twig");
+                        List<Mentor> mentorList = ModelDaoFactory.getByType(MentorDAO.class).getAllModels();
+                        model.with("mentorList", mentorList);
                         response = template.render(model);
+
                     } else if (uri.startsWith("/display_students_by_mentor", adminRoot.length())) {
                         template = JtwigTemplate.classpathTemplate("templates/admin/display_students_by_mentor.twig");
+                        List<Mentor> mentorList = ModelDaoFactory.getByType(MentorDAO.class).getAllModels();
+                        model.with("mentorList", mentorList);
                         response = template.render(model);
+
                     } else if (uri.startsWith("/create_group", adminRoot.length())) {
                         template = JtwigTemplate.classpathTemplate("templates/admin/create_group.twig");
                         response = template.render(model);

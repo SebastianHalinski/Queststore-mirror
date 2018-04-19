@@ -21,6 +21,13 @@
     <div class="createPanel, responsive_text">
      <h3 class="content_header">Display mentor</h3>
 
+      <h4>Mentor list:</h4>
+      <ol>
+          {% for mentor in mentorList %}
+            <li>{{ mentor.getFullName() }} id: {{ mentor.getId() }}</li>
+          {% endfor %}
+      </ol>
+
       <h4>To display mentor fill the form:</h4>
 
       <form method="POST">
