@@ -48,8 +48,6 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
                         template = JtwigTemplate.classpathTemplate("templates/admin/create_mentor.twig");
                         response = template.render(model);
                     }
-
-
                     else if (uri.startsWith("/admin_details", adminRoot.length())) {
                         template = JtwigTemplate.classpathTemplate("templates/admin/admin_details.twig");
                         model.with("adminName", admin.getFullName());
@@ -57,6 +55,7 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
                         model.with("idNumber", String.valueOf(admin.getId()));
                         model.with("emailAdress", admin.getEmail());
                         response = template.render(model);
+
                     } else if (uri.startsWith("/edit_mentor", adminRoot.length())) {
                         template = JtwigTemplate.classpathTemplate("templates/admin/edit_mentor.twig");
                         List<Mentor> mentorList = ModelDaoFactory.getByType(MentorDAO.class).getAllModels();
@@ -78,15 +77,18 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
                     } else if (uri.startsWith("/create_group", adminRoot.length())) {
                         template = JtwigTemplate.classpathTemplate("templates/admin/create_group.twig");
                         response = template.render(model);
+
                     } else if (uri.startsWith("/createexplvl", adminRoot.length())) {
                         template = JtwigTemplate.classpathTemplate("templates/admin/create_explvl.twig");
                         response = template.render(model);
+
                     } else if (uri.startsWith("/admin", adminRoot.length())) {
                         Headers responseHeaders = httpExchange.getResponseHeaders();
                         responseHeaders.add("Location", "/admin");
                         httpExchange.sendResponseHeaders(302, -1);
                         httpExchange.close();
                         return;
+
                     } else if (uri.startsWith("/login", adminRoot.length())) {
                         Headers responseHeaders = httpExchange.getResponseHeaders();
                         responseHeaders.add("Location", "/login");
