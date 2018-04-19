@@ -97,86 +97,29 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
                 }
             }
             if (method.equals("POST")) {
-                //actions
                 response = template.render(model);
                 String uri = httpExchange.getRequestURI().toString();
                 String adminRoot = "/admin";
                 if (uri.startsWith(adminRoot)) {
                     if (uri.startsWith("/create_mentor", adminRoot.length())) {
-                        InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
-                        BufferedReader br = new BufferedReader(isr);
-                        String formData = br.readLine();
-                        Map inputs = parseFormData(formData);
-                        createMentorProcedure(inputs);
-                        Headers responseHeaders = httpExchange.getResponseHeaders();
-                        responseHeaders.add("Location", "/admin");
-                        httpExchange.sendResponseHeaders(302, -1);
-                        httpExchange.close();
+                        createMentor(httpExchange);
                         return;
                     } else if (uri.startsWith("/edit_mentor", adminRoot.length())) {
-                        InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
-                        BufferedReader br = new BufferedReader(isr);
-                        String formData = br.readLine();
-                        Map inputs = parseFormData(formData);
-                        editMentorProcedure(inputs);
-                        Headers responseHeaders = httpExchange.getResponseHeaders();
-                        responseHeaders.add("Location", "/admin");
-                        httpExchange.sendResponseHeaders(302, -1);
-                        httpExchange.close();
+                        editMentor(httpExchange);
                         return;
                     } else if (uri.startsWith("/create_group", adminRoot.length())) {
-                        InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
-                        BufferedReader br = new BufferedReader(isr);
-                        String formData = br.readLine();
-                        Map inputs = parseFormData(formData);
-                        String group = inputs.get("fname").toString();
-                        SchoolController.createGroup(group);
-                        Headers responseHeaders = httpExchange.getResponseHeaders();
-                        responseHeaders.add("Location", "/admin");
-                        httpExchange.sendResponseHeaders(302, -1);
-                        httpExchange.close();
+                        createGroup(httpExchange);
                         return;
                     } else if (uri.startsWith("/createexplvl", adminRoot.length())) {
-                        InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
-                        BufferedReader br = new BufferedReader(isr);
-                        String formData = br.readLine();
-                        Map inputs = parseFormData(formData);
-                        String name = inputs.get("fname").toString();
-                        Integer points = Integer.parseInt(inputs.get("points").toString());
-                        ExperienceLevelsController.getInstance().createExpLevels(name, points);
-                        Headers responseHeaders = httpExchange.getResponseHeaders();
-                        responseHeaders.add("Location", "/admin");
-                        httpExchange.sendResponseHeaders(302, -1);
-                        httpExchange.close();
+                        createExpLvl(httpExchange);
                         return;
                     }
                     else if (uri.startsWith("/display_mentor", adminRoot.length())) {
-                        InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
-                        BufferedReader br = new BufferedReader(isr);
-                        String formData = br.readLine();
-                        Map inputs = parseFormData(formData);
-                        Mentor mentor = displayMentorProcedure(inputs);
-                        template = JtwigTemplate.classpathTemplate("templates/admin/default_mentor.twig");
-                        model = JtwigModel.newModel();
-                        model.with("mentorName", mentor.getFullName());
-                        model.with("role", mentor.getRole());
-                        model.with("idNumber", mentor.getId());
-                        model.with("emailAddress", mentor.getEmail());
-                        model.with("groupName", mentor.getGroupName());
-                        response = template.render(model);
+                        response = dispalyMentor(httpExchange);
                     }
 
                     else if (uri.startsWith("/display_students_by_mentor", adminRoot.length())) {
-                        InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
-                        BufferedReader br = new BufferedReader(isr);
-                        String formData = br.readLine();
-                        Map inputs = parseFormData(formData);
-                        Mentor mentor = displayMentorProcedure(inputs);
-                        List<Student> students = displayStudentsByMentor(mentor);
-                        template = JtwigTemplate.classpathTemplate("templates/admin/default_students.twig");
-                        model.with("studentList", students);
-                        model.with("groupName", mentor.getGroupName());
-                        response = template.render(model);
+                        response = displayStudentsByMentor(httpExchange, model);
 
                     }
                 }
@@ -184,6 +127,82 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
             view.sendResponse(response, httpExchange);
             }
         }
+
+    private String displayStudentsByMentor(HttpExchange httpExchange, JtwigModel model) throws IOException {
+        JtwigTemplate template;
+        String response;
+        Map inputs = getInputsMap(httpExchange);
+        Mentor mentor = displayMentorProcedure(inputs);
+        List<Student> students = displayStudentsByMentor(mentor);
+        template = JtwigTemplate.classpathTemplate("templates/admin/default_students.twig");
+        model.with("studentList", students);
+        model.with("groupName", mentor.getGroupName());
+        response = template.render(model);
+        return response;
+    }
+
+    private String dispalyMentor(HttpExchange httpExchange) throws IOException {
+        JtwigTemplate template;
+        JtwigModel model;
+        String response;
+        Map inputs = getInputsMap(httpExchange);
+        Mentor mentor = displayMentorProcedure(inputs);
+        template = JtwigTemplate.classpathTemplate("templates/admin/default_mentor.twig");
+        model = JtwigModel.newModel();
+        model.with("mentorName", mentor.getFullName());
+        model.with("role", mentor.getRole());
+        model.with("idNumber", mentor.getId());
+        model.with("emailAddress", mentor.getEmail());
+        model.with("groupName", mentor.getGroupName());
+        response = template.render(model);
+        return response;
+    }
+
+    private void createExpLvl(HttpExchange httpExchange) throws IOException {
+        Map inputs = getInputsMap(httpExchange);
+        String name = inputs.get("fname").toString();
+        Integer points = Integer.parseInt(inputs.get("points").toString());
+        ExperienceLevelsController.getInstance().createExpLevels(name, points);
+        Headers responseHeaders = httpExchange.getResponseHeaders();
+        responseHeaders.add("Location", "/admin");
+        httpExchange.sendResponseHeaders(302, -1);
+        httpExchange.close();
+    }
+
+    private Map getInputsMap(HttpExchange httpExchange) throws IOException {
+        InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
+        BufferedReader br = new BufferedReader(isr);
+        String formData = br.readLine();
+        return parseFormData(formData);
+    }
+
+    private void createGroup(HttpExchange httpExchange) throws IOException {
+        Map inputs = getInputsMap(httpExchange);
+        String group = inputs.get("fname").toString();
+        SchoolController.createGroup(group);
+        Headers responseHeaders = httpExchange.getResponseHeaders();
+        responseHeaders.add("Location", "/admin");
+        httpExchange.sendResponseHeaders(302, -1);
+        httpExchange.close();
+    }
+
+    private void editMentor(HttpExchange httpExchange) throws IOException {
+        Map inputs = getInputsMap(httpExchange);
+        editMentorProcedure(inputs);
+        Headers responseHeaders = httpExchange.getResponseHeaders();
+        responseHeaders.add("Location", "/admin");
+        httpExchange.sendResponseHeaders(302, -1);
+        httpExchange.close();
+    }
+
+    private void createMentor(HttpExchange httpExchange) throws IOException {
+        Map inputs = getInputsMap(httpExchange);
+        createMentorProcedure(inputs);
+        Headers responseHeaders = httpExchange.getResponseHeaders();
+        responseHeaders.add("Location", "/admin");
+        httpExchange.sendResponseHeaders(302, -1);
+        httpExchange.close();
+    }
 
     private Admin getLoggedAdmin(HttpExchange httpExchange) throws IOException {
         String adminRoot = "/admin?";
@@ -242,7 +261,6 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
                 break;
             case "5":
                 SchoolController.editMentorGroup(mentor, editWord);
-//                SchoolController.assignMentorToGroup(mentor);
                 break;
             case "0":
                 break;
@@ -260,18 +278,4 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
         return SchoolController.getStudentsByGroup(mentor.getGroup());
     }
 
-
-//    private void displayStudentsByMentor() {
-//        Mentor mentor = SchoolController.getMentorByUserChoice();
-//        if(mentor != null) {
-//            view.clearScreen();
-//            view.displayMessageInNextLine("Students:\n");
-//            List<Student> students = SchoolController.getStudentsByGroup(mentor.getGroup());
-//            view.displayObjects(students);
-//        }
-//    }
-
-    private void runExpLevelManager(){
-        ExperienceLevelsController.getInstance().manageExperienceLevels();
-    }
 }
