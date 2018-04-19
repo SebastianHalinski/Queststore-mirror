@@ -39,6 +39,7 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
 
             if (method.equals("GET")) {
                 response = template.render(model);
+                model.with("userName", admin.getFullName());
                 String uri = httpExchange.getRequestURI().toString();
                 String adminRoot = "/admin";
 
@@ -88,7 +89,7 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
                 response = template.render(model);
                 String uri = httpExchange.getRequestURI().toString();
                 String adminRoot = "/admin";
-                if (uri.startsWith(adminRoot)){
+                if (uri.startsWith(adminRoot)) {
                     if (uri.startsWith("/create_mentor", adminRoot.length())) {
                         InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
                         BufferedReader br = new BufferedReader(isr);
@@ -100,9 +101,7 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
                         httpExchange.sendResponseHeaders(302, -1);
                         httpExchange.close();
                         return;
-                    }
-
-                    else if (uri.startsWith("/edit_mentor", adminRoot.length())) {
+                    } else if (uri.startsWith("/edit_mentor", adminRoot.length())) {
                         InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
                         BufferedReader br = new BufferedReader(isr);
                         String formData = br.readLine();
@@ -113,8 +112,7 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
                         httpExchange.sendResponseHeaders(302, -1);
                         httpExchange.close();
                         return;
-                    }
-                    else if (uri.startsWith("/create_group", adminRoot.length())) {
+                    } else if (uri.startsWith("/create_group", adminRoot.length())) {
                         InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
                         BufferedReader br = new BufferedReader(isr);
                         String formData = br.readLine();
@@ -126,27 +124,26 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
                         httpExchange.sendResponseHeaders(302, -1);
                         httpExchange.close();
                         return;
+                    } else if (uri.startsWith("/createexplvl", adminRoot.length())) {
+                        InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
+                        BufferedReader br = new BufferedReader(isr);
+                        String formData = br.readLine();
+                        Map inputs = parseFormData(formData);
+                        String name = inputs.get("fname").toString();
+                        Integer points = Integer.parseInt(inputs.get("points").toString());
+                        ExperienceLevelsController.getInstance().createExpLevels(name, points);
+//                    SchoolController.createGroup(group);
+                        Headers responseHeaders = httpExchange.getResponseHeaders();
+                        responseHeaders.add("Location", "/admin");
+                        httpExchange.sendResponseHeaders(302, -1);
+                        httpExchange.close();
+                        return;
                     }
                 }
-                else if (uri.startsWith("/createexplvl", adminRoot.length())) {
-                    InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
-                    BufferedReader br = new BufferedReader(isr);
-                    String formData = br.readLine();
-                    Map inputs = parseFormData(formData);
-                    String name = inputs.get("fname").toString();
-                    Integer points = Integer.parseInt(inputs.get("points").toString());
-                    ExperienceLevelsController.getInstance().createExpLevels(name, points);
-//                    SchoolController.createGroup(group);
-                    Headers responseHeaders = httpExchange.getResponseHeaders();
-                    responseHeaders.add("Location", "/admin");
-                    httpExchange.sendResponseHeaders(302, -1);
-                    httpExchange.close();
-                    return;
-                }
-            }
-            view.sendResponse(response, httpExchange);
+                view.sendResponse(response, httpExchange);
             }
         }
+    }
 
     private Admin getLoggedAdmin(HttpExchange httpExchange) throws IOException {
         String adminRoot = "/admin?";
