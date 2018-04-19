@@ -1,6 +1,7 @@
 package controllers;
 
 import java.io.*;
+import java.net.HttpCookie;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.util.HashMap;
@@ -20,19 +21,22 @@ import view.AdminView;
 public class AdminController extends UserControllerImpl implements HttpHandler {
 
     private AdminView view;
-    private Admin admin;
+    private String sessionId;
 
     public AdminController() {
         this.view = new AdminView();
-        admin = null;
     }
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        if (admin == null) {
-            admin = getLoggedAdmin(httpExchange);
+        String response = " ";
+        if (httpExchange.getRequestURI().toString().contains("sessionId")) {
+            sessionId = httpExchange.getRequestURI().toString();
+            redirectToAdminPage(httpExchange);
+            return;
         } else {
-            String response = " ";
+            Admin admin = getLoggedAdmin(sessionId);
+            admin.setSessionId(sessionId);
             String method = httpExchange.getRequestMethod();
             JtwigTemplate template = JtwigTemplate.classpathTemplate("templates/admin/admin.twig");
             JtwigModel model = JtwigModel.newModel();
@@ -70,12 +74,9 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
                         template = JtwigTemplate.classpathTemplate("templates/admin/create_explvl.twig");
                         response = template.render(model);
                     } else if (uri.startsWith("/admin", adminRoot.length())) {
-                        Headers responseHeaders = httpExchange.getResponseHeaders();
-                        responseHeaders.add("Location", "/admin");
-                        httpExchange.sendResponseHeaders(302, -1);
-                        httpExchange.close();
-                        return;
+                        redirectToAdminPage(httpExchange);
                     } else if (uri.startsWith("/login", adminRoot.length())) {
+                        admin = null;
                         Headers responseHeaders = httpExchange.getResponseHeaders();
                         responseHeaders.add("Location", "/login");
                         httpExchange.sendResponseHeaders(302, -1);
@@ -141,18 +142,20 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
                 }
             }
             view.sendResponse(response, httpExchange);
-            }
         }
+    }
 
-    private Admin getLoggedAdmin(HttpExchange httpExchange) throws IOException {
-        String adminRoot = "/admin?";
-        String uri = httpExchange.getRequestURI().toString();
-        int id = Integer.parseInt(uri.substring(adminRoot.length(), uri.length()));
+    private Admin getLoggedAdmin(String sessionId) {
+        String[] uriElements = sessionId.split("\\?");
+        int id = Integer.parseInt(uriElements[2]);
+        return ModelDaoFactory.getByType(AdminDAO.class).getModelById(id);
+    }
+
+    private void redirectToAdminPage(HttpExchange httpExchange) throws IOException {
         Headers requestHeaders = httpExchange.getResponseHeaders();
         requestHeaders.add("Location", "/admin");
         httpExchange.sendResponseHeaders(302,-1);
         httpExchange.close();
-        return ModelDaoFactory.getByType(AdminDAO.class).getModelById(id);
     }
 
     private static Map<String, String> parseFormData(String formData) throws UnsupportedEncodingException {
@@ -170,17 +173,14 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
         String firstName = inputs.get("fname").toString();
         String lastName = inputs.get("lname").toString();
         String password = inputs.get("password").toString();
-        System.out.println(firstName + lastName + password);
         GeneralModelFactory.getByType(MentorFactoryImpl.class).create(firstName, lastName, password);
     }
 
     private void editMentorProcedure(Map inputs){
         String mentorId = inputs.get("fname").toString();
         Mentor mentor = SchoolController.getMentorByUserChoice(mentorId);
-        System.out.println(mentor.getId());
         String editWord = inputs.get("password").toString();
         String option = inputs.get("lname").toString();
-        System.out.println(option + editWord);
         switch (option) {
             case "1":
                 String firstName = editWord;

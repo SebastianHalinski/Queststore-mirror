@@ -19,8 +19,6 @@ import java.util.*;
 
 public class LoginController implements HttpHandler  {
     private UsersView view;
-    private List<User> loggedUsers = new ArrayList<>();
-    private HttpCookie cookie;
 
     LoginController() {
         view = new UsersView();
@@ -28,8 +26,9 @@ public class LoginController implements HttpHandler  {
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        cookie = createSessionCookie(httpExchange);
-        User loggedUser = getLoggedUsserAccount(cookie);
+        User user = null;
+        HttpCookie cookie = createSessionCookie(httpExchange);
+        System.out.println(cookie);
         String response;
         String method = httpExchange.getRequestMethod();
         JtwigTemplate template = JtwigTemplate.classpathTemplate("templates/login.twig");
@@ -45,52 +44,37 @@ public class LoginController implements HttpHandler  {
             BufferedReader br = new BufferedReader(isr);
             String formData = br.readLine();
             Map inputs = parseFormData(formData);
-            loggedUser = loggingProcedure(inputs, loggedUser);
+            user = loggingProcedure(inputs,user, cookie);
             Headers headers = httpExchange.getResponseHeaders();
 
-            if(loggedUser.getRole().equals("admin")) {
-                headers.set("Location", "admin?"+ loggedUser.getId());
-            } else if(loggedUser.getRole().equals("mentor")) {
+            if(user.getRole().equals("admin")) {
+                headers.set("Location", "admin?" + cookie.toString() +"?" +user.getId());
+            } else if(user.getRole().equals("mentor")) {
                 headers.set("Location", "mentor");
-            } else if(loggedUser.getRole().equals("student")) {
+            } else if(user.getRole().equals("student")) {
                 headers.set("Location", "student");
             }
+            user = null;
             httpExchange.sendResponseHeaders(302, -1);
         }
     }
 
-    private User loggingProcedure(Map inputs, User user) {
+    private User loggingProcedure(Map inputs, User user, HttpCookie cookie) {
         String login = inputs.get("uname").toString();
         String password = inputs.get("psw").toString();
 
         try {
             user = SpecialDaoFactory.getByType(LoginDAO.class).getUserByLoginAndPassword(login, password);
-            loggedUsers.add(user);
+            user.setSessionId(cookie.toString());
         } catch (LoginFailure ex) {
-            System.out.println("Login failed");
+            ex.getMessage();
         }
         return user;
     }
 
-    private User getLoggedUsserAccount(HttpCookie cookie) {
-        for(User user : loggedUsers) {
-            if(cookie.toString().equals(user.getSessionId())){
-                return user;
-            }
-        }
-        return null;
-    }
-
     private HttpCookie createSessionCookie(HttpExchange httpExchange) {
-        String cookieStr = httpExchange.getRequestHeaders().getFirst("Cookie");
-        HttpCookie cookie;
-        if (cookieStr != null) {  // Cookie already exists
-            cookie = HttpCookie.parse(cookieStr).get(0);
-        }
-        else {
-            cookie = new HttpCookie("sessionId", UUID.randomUUID().toString());
-            httpExchange.getResponseHeaders().add("Set-Cookie", cookie.toString());
-        }
+        HttpCookie cookie = new HttpCookie("sessionId", UUID.randomUUID().toString());
+        httpExchange.getResponseHeaders().add("Set-Cookie", cookie.toString());
         return cookie;
     }
 
