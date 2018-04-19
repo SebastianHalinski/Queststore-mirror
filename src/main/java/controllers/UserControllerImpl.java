@@ -12,8 +12,6 @@ import view.UsersView;
 
 public abstract class  UserControllerImpl implements UserController {
 
-    public abstract void executeMainMenu();
-
     protected <T extends User> void showProfile(T user){
         UsersView view = new UsersView();
         view.displayUserWithDetails(user);

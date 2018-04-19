@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <link rel="stylesheet" href="/static/css/student_details.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/admin_panel.css">
+    <link rel="stylesheet" href="/static/css/my_team.css">
+    <link rel="stylesheet" href="/static/css/content_header.css">
+    <link rel="stylesheet" href="/static/css/responsive_panel.css">
+    <meta charset="utf-8">
+    <title>Student page</title>
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="/static/js/script.js"></script>
+
+  </head>
+  <body>
+
+  {% include "admin_panel.twig" %}
+
+    <div class="content, responsive_text">
+      <h3 class="content_header">Students details</h3>
+      
+        <h4>Group name: {{ groupName }}</h4>
+        <ol>
+          {% for student in studentList %}
+          <li> {{ student.getFullName() }}, role: student id: {{ student.getId() }}, email: {{student.getEmail()}}</li>
+          {% endfor %}
+        </ol>
+    </div>
+  </body>
+
+
+
+  </html>

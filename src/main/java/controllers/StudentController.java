@@ -1,10 +1,15 @@
 package controllers;
 
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
 import enums.QuestsStatus;
 import model.*;
+import org.jtwig.JtwigModel;
+import org.jtwig.JtwigTemplate;
 import view.StudentView;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -12,13 +17,29 @@ import java.util.Set;
 
 import static enums.QuestsStatus.WAITING_FOR_APPROVAL;
 
-public class StudentController extends UserControllerImpl {
+public class StudentController extends UserControllerImpl implements HttpHandler {
     private Student student;
     private StudentView view;
 
-    public StudentController(Student student){
+    public StudentController(){
         this.student = student;
         view = new StudentView();
+    }
+
+    @Override
+    public void handle(HttpExchange httpExchange) throws IOException {
+        String response = " ";
+        String method = httpExchange.getRequestMethod();
+        JtwigTemplate template = JtwigTemplate.classpathTemplate("templates/student/student.twig");
+        JtwigModel model = JtwigModel.newModel();
+
+        if (method.equals("GET")) {
+            response = template.render(model);
+        }
+        if (method.equals("POST")) {
+            //actions
+        }
+        view.sendResponse(response, httpExchange);
     }
 
     public void executeMainMenu() {

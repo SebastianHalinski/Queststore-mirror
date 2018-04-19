@@ -1,0 +1,45 @@
+
+    <div class="topnav">
+      <a href="mentor.html"> <img id="logo" src="/static/images/codecool-logo.png"></a>
+      <div class="container" onclick="animateBurger(this); dropdownMenu();">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+        <div id="myDropdown" class="dropdown-content">
+          <div>
+            <h3 id="name">Dominik Starzyk</h3>
+            <img id="userAvatar" src="/static/images/user-image.jpg">
+            <hr class="style1">
+          </div>
+
+          <a class= "centered" href="mentor_details.html">Show profile details</a>
+          <a class= "centered" href="login">Logout &nbsp;<i class="fas fa-sign-out-alt"></i></a>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="sidenav">
+      <h3>Class management</h3>
+      <ul>
+        <li><a class="sideoptions" href="create_student.twig"> Create student account</a></li>
+        <li><a class="sideoptions" href="assign_student_to_group.twig"> Assign student to group</a></li>
+        <li><a class="sideoptions" href="assign_student_to_team.twig"> Assign student to team</a></li>
+        <li><a class="sideoptions" href="mark_student_quest.twig"> Mark student quest</a></li>
+        <li><a class="sideoptions" href="display_student_details.twig"> Display student details</a></li>
+        <li><a class="sideoptions" href="mark_student_artifacts.twig"> Mark student artifacts</a></li>
+        <li><a class="sideoptions" href="show_my_students.twig"> Show my students</a></li>
+      </ul>
+      <h3>Administration</h3>
+      <ul>
+        <li><a class="sideoptions" href="create_quest.twig"> Create quest</a></li>
+        <li><a class="sideoptions" href="edit_quest.twig"> Edit quest</a></li>
+        <li><a class="sideoptions" href="create_artifact.twig"> Create artifact</a></li>
+        <li><a class="sideoptions" href="edit_artifact.twig"> Edit artifact</a></li>
+        <li><a class="sideoptions" href="create_new_team.twig"> Create new team</a></li>
+      </ul>
+      <h3>Attendance</h3>
+      <ul>
+        <li><a id="lastElement" class="sideoptions" href="check_attendance.twig"> Start checking</a></li>
+      </ul>
+    </div>

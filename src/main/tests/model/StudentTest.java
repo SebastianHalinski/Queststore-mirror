@@ -1,12 +1,14 @@
 package model;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class StudentTest{
+import org.junit.Test;
+
+import static junit.framework.Assert.assertEquals;
+
+public class StudentTest{
 
     @Test
-    void studentWalletShoudntBeOnMinus() {
+    public void studentWalletShoudntBeOnMinus() {
         Team myTeam = new Team(10, "Trololo");
         Group myGroup = new Group(10, "Hehehe");
 

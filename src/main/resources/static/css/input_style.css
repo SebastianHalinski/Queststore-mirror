@@ -1,0 +1,50 @@
+input[type=text]{
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+label {
+  padding: 12px 12px 12px 0;
+  display: inline-block;
+}
+
+#submit{
+  margin-top: 4vw;
+}
+
+input[type=checkbox]{
+  margin-top: 20px;
+}
+
+.col-25 {
+  float: left;
+  width: 25%;
+  margin-top: 6px;
+}
+
+.col-75 {
+  float: left;
+  width: 40%;
+  margin-top: 6px;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+input[type=text]:focus {
+    border: 3px solid #555;
+}
+
+
+@media screen and (max-width: 650px) {
+  .col-25, .col-75{
+    width: 50%;
+    margin-top: 0;
+  }

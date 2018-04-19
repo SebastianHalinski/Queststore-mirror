@@ -15,15 +15,15 @@ public class UserControllerFactory {
         switch(userName) {
             case("Admin"):
                 Admin admin = (Admin) user;
-                controller = new AdminController(admin);
+                controller = new AdminController();
                 break;
             case("Mentor"):
                 Mentor mentor = (Mentor) user;
-                controller = new MentorController(mentor);
+                controller = new MentorController();
                 break;
             case("Student"):
                 Student student = (Student) user;
-                controller = new StudentController(student);
+                controller = new StudentController();
                 break;
         }
         return controller;

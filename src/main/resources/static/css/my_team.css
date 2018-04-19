@@ -1,0 +1,26 @@
+.content {
+  padding-left: 15%;
+  margin: 0;
+}
+.content h2 {
+  text-align: center;
+  padding-right: 10%;
+}
+
+.team {
+  padding-top: 5%;
+  padding-left: 20%;
+}
+
+.team li {
+  padding: 10px 5px;
+}
+
+.team ol {
+	list-style-type: none;
+	padding: 0 0;
+}
+
+hr {
+	border: 0; height: 0; border-top: 1px solid rgba(0, 0, 0, 0.1); border-bottom: 1px solid rgba(255, 255, 255, 0.3); 
+}
