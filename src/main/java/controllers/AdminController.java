@@ -42,93 +42,102 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
                 response = template.render(model);
                 String uri = httpExchange.getRequestURI().toString();
                 String adminRoot = "/admin";
-
-                if (uri.startsWith(adminRoot)) {
-                    if (uri.startsWith("/create_mentor", adminRoot.length())) {
-                        template = JtwigTemplate.classpathTemplate("templates/admin/create_mentor.twig");
-                        response = template.render(model);
-                    }
-                    else if (uri.startsWith("/admin_details", adminRoot.length())) {
-                        template = JtwigTemplate.classpathTemplate("templates/admin/admin_details.twig");
-                        model.with("adminName", admin.getFullName());
-                        model.with("roleDetail", admin.getRole());
-                        model.with("idNumber", String.valueOf(admin.getId()));
-                        model.with("emailAdress", admin.getEmail());
-                        response = template.render(model);
-
-                    } else if (uri.startsWith("/edit_mentor", adminRoot.length())) {
-                        template = JtwigTemplate.classpathTemplate("templates/admin/edit_mentor.twig");
-                        List<Mentor> mentorList = ModelDaoFactory.getByType(MentorDAO.class).getAllModels();
-                        model.with("mentorList", mentorList);
-                        response = template.render(model);
-
-                    } else if (uri.startsWith("/display_mentor", adminRoot.length())) {
-                        template = JtwigTemplate.classpathTemplate("templates/admin/display_mentor.twig");
-                        List<Mentor> mentorList = ModelDaoFactory.getByType(MentorDAO.class).getAllModels();
-                        model.with("mentorList", mentorList);
-                        response = template.render(model);
-
-                    } else if (uri.startsWith("/display_students_by_mentor", adminRoot.length())) {
-                        template = JtwigTemplate.classpathTemplate("templates/admin/display_students_by_mentor.twig");
-                        List<Mentor> mentorList = ModelDaoFactory.getByType(MentorDAO.class).getAllModels();
-                        model.with("mentorList", mentorList);
-                        response = template.render(model);
-
-                    } else if (uri.startsWith("/create_group", adminRoot.length())) {
-                        template = JtwigTemplate.classpathTemplate("templates/admin/create_group.twig");
-                        response = template.render(model);
-
-                    } else if (uri.startsWith("/createexplvl", adminRoot.length())) {
-                        template = JtwigTemplate.classpathTemplate("templates/admin/create_explvl.twig");
-                        response = template.render(model);
-
-                    } else if (uri.startsWith("/admin", adminRoot.length())) {
-                        Headers responseHeaders = httpExchange.getResponseHeaders();
-                        responseHeaders.add("Location", "/admin");
-                        httpExchange.sendResponseHeaders(302, -1);
-                        httpExchange.close();
-                        return;
-
-                    } else if (uri.startsWith("/login", adminRoot.length())) {
-                        Headers responseHeaders = httpExchange.getResponseHeaders();
-                        responseHeaders.add("Location", "/login");
-                        httpExchange.sendResponseHeaders(302, -1);
-                        httpExchange.close();
-                        return;
-                    }
-                }
+                getPageManager(uri, adminRoot, response, template, model, httpExchange );
             }
             if (method.equals("POST")) {
                 response = template.render(model);
                 String uri = httpExchange.getRequestURI().toString();
                 String adminRoot = "/admin";
-                if (uri.startsWith(adminRoot)) {
-                    if (uri.startsWith("/create_mentor", adminRoot.length())) {
-                        createMentor(httpExchange);
-                        return;
-                    } else if (uri.startsWith("/edit_mentor", adminRoot.length())) {
-                        editMentor(httpExchange);
-                        return;
-                    } else if (uri.startsWith("/create_group", adminRoot.length())) {
-                        createGroup(httpExchange);
-                        return;
-                    } else if (uri.startsWith("/createexplvl", adminRoot.length())) {
-                        createExpLvl(httpExchange);
-                        return;
-                    }
-                    else if (uri.startsWith("/display_mentor", adminRoot.length())) {
-                        response = dispalyMentor(httpExchange);
-                    }
-
-                    else if (uri.startsWith("/display_students_by_mentor", adminRoot.length())) {
-                        response = displayStudentsByMentor(httpExchange, model);
-
-                    }
-                }
+                postPageManager(uri, adminRoot, httpExchange, response, model);
             }
             view.sendResponse(response, httpExchange);
             }
         }
+
+    private void postPageManager(String uri, String adminRoot, HttpExchange httpExchange, String response, JtwigModel model) throws IOException {
+        if (uri.startsWith(adminRoot)) {
+            if (uri.startsWith("/create_mentor", adminRoot.length())) {
+                createMentor(httpExchange);
+                return;
+            } else if (uri.startsWith("/edit_mentor", adminRoot.length())) {
+                editMentor(httpExchange);
+                return;
+            } else if (uri.startsWith("/create_group", adminRoot.length())) {
+                createGroup(httpExchange);
+                return;
+            } else if (uri.startsWith("/createexplvl", adminRoot.length())) {
+                createExpLvl(httpExchange);
+                return;
+            }
+            else if (uri.startsWith("/display_mentor", adminRoot.length())) {
+                response = dispalyMentor(httpExchange);
+            }
+
+            else if (uri.startsWith("/display_students_by_mentor", adminRoot.length())) {
+                response = displayStudentsByMentor(httpExchange, model);
+
+            }
+        }
+        view.sendResponse(response, httpExchange);
+    }
+
+
+    private void getPageManager(String uri, String adminRoot, String response, JtwigTemplate template, JtwigModel model, HttpExchange httpExchange ) throws IOException {
+        if (uri.startsWith(adminRoot)) {
+            if (uri.startsWith("/create_mentor", adminRoot.length())) {
+                template = JtwigTemplate.classpathTemplate("templates/admin/create_mentor.twig");
+                response = template.render(model);
+            } else if (uri.startsWith("/admin_details", adminRoot.length())) {
+                template = JtwigTemplate.classpathTemplate("templates/admin/admin_details.twig");
+                model.with("adminName", admin.getFullName());
+                model.with("roleDetail", admin.getRole());
+                model.with("idNumber", String.valueOf(admin.getId()));
+                model.with("emailAdress", admin.getEmail());
+                response = template.render(model);
+
+            } else if (uri.startsWith("/edit_mentor", adminRoot.length())) {
+                template = JtwigTemplate.classpathTemplate("templates/admin/edit_mentor.twig");
+                List<Mentor> mentorList = ModelDaoFactory.getByType(MentorDAO.class).getAllModels();
+                model.with("mentorList", mentorList);
+                response = template.render(model);
+
+            } else if (uri.startsWith("/display_mentor", adminRoot.length())) {
+                template = JtwigTemplate.classpathTemplate("templates/admin/display_mentor.twig");
+                List<Mentor> mentorList = ModelDaoFactory.getByType(MentorDAO.class).getAllModels();
+                model.with("mentorList", mentorList);
+                response = template.render(model);
+
+            } else if (uri.startsWith("/display_students_by_mentor", adminRoot.length())) {
+                template = JtwigTemplate.classpathTemplate("templates/admin/display_students_by_mentor.twig");
+                List<Mentor> mentorList = ModelDaoFactory.getByType(MentorDAO.class).getAllModels();
+                model.with("mentorList", mentorList);
+                response = template.render(model);
+
+            } else if (uri.startsWith("/create_group", adminRoot.length())) {
+                template = JtwigTemplate.classpathTemplate("templates/admin/create_group.twig");
+                response = template.render(model);
+
+            } else if (uri.startsWith("/createexplvl", adminRoot.length())) {
+                template = JtwigTemplate.classpathTemplate("templates/admin/create_explvl.twig");
+                response = template.render(model);
+
+            } else if (uri.startsWith("/admin", adminRoot.length())) {
+                Headers responseHeaders = httpExchange.getResponseHeaders();
+                responseHeaders.add("Location", "/admin");
+                httpExchange.sendResponseHeaders(302, -1);
+                httpExchange.close();
+                return;
+
+            } else if (uri.startsWith("/login", adminRoot.length())) {
+                Headers responseHeaders = httpExchange.getResponseHeaders();
+                responseHeaders.add("Location", "/login");
+                httpExchange.sendResponseHeaders(302, -1);
+                httpExchange.close();
+                return;
+            }
+        }
+        view.sendResponse(response, httpExchange);
+    }
 
     private String displayStudentsByMentor(HttpExchange httpExchange, JtwigModel model) throws IOException {
         JtwigTemplate template;
