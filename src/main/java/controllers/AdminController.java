@@ -73,8 +73,7 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
                 createMentor(httpExchange);
                 return;
             } else if (uri.startsWith("/edit_mentor", adminRoot.length())) {
-                editMentor(httpExchange);
-                return;
+                response = editMentor(httpExchange);
             } else if (uri.startsWith("/create_group", adminRoot.length())) {
                 createGroup(httpExchange);
                 return;
@@ -212,16 +211,23 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
         httpExchange.close();
     }
 
-    private void editMentor(HttpExchange httpExchange) throws IOException {
+    private String editMentor(HttpExchange httpExchange) throws IOException {
+        JtwigTemplate template = JtwigTemplate.classpathTemplate("templates/admin/edit_mentor.twig");
+        JtwigModel model = JtwigModel.newModel();
+        String response ;
         Map inputs = getInputsMap(httpExchange);
+
         if(isEnteredMentorIdCorrect(inputs)) {
             editMentorProcedure(inputs);
+            model.with("operationStatus", "Operation was succesfull");
+        } else {
+            model.with("operationStatus", "Cannot find mentor with given ID");
         }
-        Headers responseHeaders = httpExchange.getResponseHeaders();
-        responseHeaders.add("Location", "/admin");
-        httpExchange.sendResponseHeaders(302, -1);
-        httpExchange.close();
 
+        List<Mentor> mentorList = ModelDaoFactory.getByType(MentorDAO.class).getAllModels();
+        model.with("mentorList", mentorList);
+        response = template.render(model);
+        return response;
     }
 
     private boolean isEnteredMentorIdCorrect(Map inputs) {
