@@ -36,15 +36,15 @@
             <label for="fname">Mentor Id</label>
           </div>
           <div class="col-75">
-            <input type="text" id="mentorId" name="mentorId">
+            <input type="text" id="mentorId" name="mentorId" pattern="[0-9]{1,}" required title="Only numbers in ID">
           </div>
         </div>
 
           <div class="row">
             <button class="button" type="submit"> Show</button>
           </div>
-        </div>
       </form>
+        <h4>{{ errorMessage }}</h4>
    </div>
   </body>
 </html>

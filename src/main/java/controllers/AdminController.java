@@ -149,11 +149,20 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
         String response;
         Map inputs = getInputsMap(httpExchange);
         Mentor mentor = getMentorDetails(inputs);
-        List<Student> students = getStudentsAssignedToMentor(mentor);
-        template = JtwigTemplate.classpathTemplate("templates/admin/default_students.twig");
-        model.with("studentList", students);
-        model.with("groupName", mentor.getGroupName());
-        response = template.render(model);
+        if(mentor != null) {
+            List<Student> students = getStudentsAssignedToMentor(mentor);
+            template = JtwigTemplate.classpathTemplate("templates/admin/default_students.twig");
+            model.with("studentList", students);
+            model.with("groupName", mentor.getGroupName());
+            response = template.render(model);
+        } else {
+            template = JtwigTemplate.classpathTemplate("templates/admin/display_students_by_mentor.twig");
+            model = JtwigModel.newModel();
+            List<Mentor> mentorList = ModelDaoFactory.getByType(MentorDAO.class).getAllModels();
+            model.with("mentorList", mentorList);
+            model.with("errorMessage", "Cannot find mentor with given ID");
+            response = template.render(model);
+        }
         return response;
     }
 
