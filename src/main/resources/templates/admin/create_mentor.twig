@@ -27,7 +27,7 @@
 			<label for="fname">First Name</label>
 		  </div>
 		  <div class="col-75">
-			<input type="text" id="fname" name="fname">
+			<input type="text" id="fname" name="fname" pattern="[A-Za-z]{2,}" required title="Only letters allowed">
 		  </div>
 		</div>
 		<div class="row">
@@ -35,7 +35,7 @@
 			<label for="lname">Last Name</label>
 		  </div>
 		  <div class="col-75">
-			<input type="text" id="lname" name="lname">
+			<input type="text" id="lname" name="lname" pattern="[A-Za-z]{2,}" required title="Only letters allowed">
 		  </div>
 		</div>
 		<div class="row">
@@ -43,12 +43,12 @@
 			<label for="password">Password</label>
 		  </div>
 		  <div class="col-75">
-			<input type="text" id="password" name="password">
+			<input type="password" id="password" name="password" pattern=".{6,}" title="6 characters minimum">
 		  </div>
 		</div>
 
 		  <div class="row">
-			<input class="button" id="submit" type="submit" value="Submit" >
+			<input class="button" id="submit" type="submit" value="Submit">
 		  </div>
       </form>
     </div>
