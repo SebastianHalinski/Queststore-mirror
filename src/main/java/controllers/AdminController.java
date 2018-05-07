@@ -26,11 +26,10 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        String response = " ";
+        String response;
         if (httpExchange.getRequestURI().toString().contains("sessionId")) {
             sessionId = httpExchange.getRequestURI().toString();
             redirectToAdminPage(httpExchange);
-            return;
         } else {
             Admin admin = getLoggedAdmin(sessionId);
             admin.setSessionId(sessionId);
@@ -43,15 +42,15 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
                 response = template.render(model);
                 String uri = httpExchange.getRequestURI().toString();
                 String adminRoot = "/admin";
-                getPageManager(admin, uri, adminRoot, response, template, model, httpExchange );
+                getPageManager(admin, uri, adminRoot, response, template, model, httpExchange);
             }
+
             if (method.equals("POST")) {
                 response = template.render(model);
                 String uri = httpExchange.getRequestURI().toString();
                 String adminRoot = "/admin";
                 postPageManager(uri, adminRoot, httpExchange, response, model);
             }
-            view.sendResponse(response, httpExchange);
         }
     }
 
@@ -66,7 +65,6 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
         responseHeaders.add("Location", "/admin");
         httpExchange.sendResponseHeaders(302, -1);
         httpExchange.close();
-        return;
     }
 
     private void postPageManager(String uri, String adminRoot, HttpExchange httpExchange, String response, JtwigModel model) throws IOException {
@@ -85,7 +83,7 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
                 return;
             }
             else if (uri.startsWith("/display_mentor", adminRoot.length())) {
-                response = dispalyMentor(httpExchange);
+                response = displayMentor(httpExchange);
             }
             else if (uri.startsWith("/display_students_by_mentor", adminRoot.length())) {
                 response = displayStudentsByMentor(httpExchange, model);
@@ -151,8 +149,8 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
         JtwigTemplate template;
         String response;
         Map inputs = getInputsMap(httpExchange);
-        Mentor mentor = displayMentorProcedure(inputs);
-        List<Student> students = displayStudentsByMentor(mentor);
+        Mentor mentor = getMentorDetails(inputs);
+        List<Student> students = getStudentsAssignedToMentor(mentor);
         template = JtwigTemplate.classpathTemplate("templates/admin/default_students.twig");
         model.with("studentList", students);
         model.with("groupName", mentor.getGroupName());
@@ -160,20 +158,29 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
         return response;
     }
 
-    private String dispalyMentor(HttpExchange httpExchange) throws IOException {
+    private String displayMentor(HttpExchange httpExchange) throws IOException {
         JtwigTemplate template;
         JtwigModel model;
         String response;
         Map inputs = getInputsMap(httpExchange);
-        Mentor mentor = displayMentorProcedure(inputs);
-        template = JtwigTemplate.classpathTemplate("templates/admin/default_mentor.twig");
-        model = JtwigModel.newModel();
-        model.with("mentorName", mentor.getFullName());
-        model.with("role", mentor.getRole());
-        model.with("idNumber", mentor.getId());
-        model.with("emailAddress", mentor.getEmail());
-        model.with("groupName", mentor.getGroupName());
-        response = template.render(model);
+        Mentor mentor = getMentorDetails(inputs);
+        if(mentor != null) {
+            template = JtwigTemplate.classpathTemplate("templates/admin/default_mentor.twig");
+            model = JtwigModel.newModel();
+            model.with("mentorName", mentor.getFullName());
+            model.with("role", mentor.getRole());
+            model.with("idNumber", mentor.getId());
+            model.with("emailAddress", mentor.getEmail());
+            model.with("groupName", mentor.getGroupName());
+            response = template.render(model);
+        } else {
+            template = JtwigTemplate.classpathTemplate("templates/admin/display_mentor.twig");
+            model = JtwigModel.newModel();
+            List<Mentor> mentorList = ModelDaoFactory.getByType(MentorDAO.class).getAllModels();
+            model.with("mentorList", mentorList);
+            model.with("errorMessage", "Cannot find mentor with given ID");
+            response = template.render(model);
+        }
         return response;
     }
 
@@ -207,11 +214,19 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
 
     private void editMentor(HttpExchange httpExchange) throws IOException {
         Map inputs = getInputsMap(httpExchange);
-        editMentorProcedure(inputs);
+        if(isEnteredMentorIdCorrect(inputs)) {
+            editMentorProcedure(inputs);
+        }
         Headers responseHeaders = httpExchange.getResponseHeaders();
         responseHeaders.add("Location", "/admin");
         httpExchange.sendResponseHeaders(302, -1);
         httpExchange.close();
+
+    }
+
+    private boolean isEnteredMentorIdCorrect(Map inputs) {
+        String mentorId = inputs.get("mentorId").toString();
+        return SchoolController.getMentorByUserChoice(mentorId) != null;
     }
 
     private void createMentor(HttpExchange httpExchange) throws IOException {
@@ -242,26 +257,22 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
     }
 
     private void editMentorProcedure(Map inputs){
-        String mentorId = inputs.get("fname").toString();
+        String mentorId = inputs.get("mentorId").toString();
         Mentor mentor = SchoolController.getMentorByUserChoice(mentorId);
-        String editWord = inputs.get("password").toString();
-        String option = inputs.get("lname").toString();
+        String editWord = inputs.get("newData").toString();
+        String option = inputs.get("option").toString();
         switch (option) {
             case "1":
-                String firstName = editWord;
-                mentor.setFirstName(firstName);
+                mentor.setFirstName(editWord);
                 break;
             case "2":
-                String lastName = editWord;
-                mentor.setLastName(lastName);
+                mentor.setLastName(editWord);
                 break;
             case "3":
-                String password = editWord;
-                mentor.setPassword(password);
+                mentor.setPassword(editWord);
                 break;
             case "4":
-                String email = editWord;
-                mentor.setEmail(email);
+                mentor.setEmail(editWord);
                 break;
             case "5":
                 SchoolController.editMentorGroup(mentor, editWord);
@@ -271,13 +282,13 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
         }
     }
 
-    private Mentor displayMentorProcedure(Map inputs){
+    private Mentor getMentorDetails(Map inputs){
         String mentorId = inputs.get("mentorId").toString();
         return SchoolController.getMentorByUserChoice(mentorId);
 
     }
 
-    private List<Student> displayStudentsByMentor(Mentor mentor){
+    private List<Student> getStudentsAssignedToMentor(Mentor mentor){
         return SchoolController.getStudentsByGroup(mentor.getGroup());
     }
 }
