@@ -1,23 +1,18 @@
 
     <div class="topnav">
-      <a href="student.html"><img id="logo" src="/static/images/codecool-logo.png" alt="Codecool logo"></a>
+      <a href="student"><img id="logo" src="/static/images/codecool-logo.png" alt="Codecool logo"></a>
       <div class="container" onclick="animateBurger(this); dropdownMenu();">
         <div class="bar1"></div>
         <div class="bar2"></div>
         <div class="bar3"></div>
         <div id="myDropdown" class="dropdown-content">
           <div>
-            <h3 id="name">Kamil Boksa</h3>
+            <h3 id="name">{{ userName }}</h3>
             <img id="userAvatar" src="/static/images/user-image.jpg">
             <hr class="style1">
           </div>
-<<<<<<< HEAD
-          <a class= "centered" href="student_details.twig">Show profile details</a>
-          <a class= "centered" href="../../templates/login.twig">Logout &nbsp;<i class="fas fa-sign-out-alt"></i></a>
-=======
-          <a class= "centered" href="student_details.html">Show profile details</a>
+          <a class= "centered" href="/student/student_details">Show profile details</a>
           <a class= "centered" href="login">Logout &nbsp;<i class="fas fa-sign-out-alt"></i></a>
->>>>>>> 3132e88194ab6fee17e8b908077a8c3e9da24b00
         </div>
       </div>
     </div>
@@ -25,12 +20,12 @@
     <div class="sidenav">
       <h3>Student menu</h3>
       <ul>
-        <li><a class="sideoptions" href="shop.twig"> Shop</a></li>
-        <li><a class="sideoptions" href="my_inventory.twig"> My Inventory</a></li>
-        <li><a class="sideoptions" href="my_team.twig"> Display my Team</a></li>
-        <li><a class="sideoptions" href="team_inventory.twig"> Team Inventory</a></li>
-        <li><a class="sideoptions" href="available_quests.twig"> Pick Quest</a></li>
-        <li><a class="sideoptions" href="active_quests.twig"> Display active quests</a></li>
-        <li><a class="sideoptions" href="attendance.twig"> Show my attendance</a></li>
+        <li><a class="sideoptions" href="/student/shop"> Shop</a></li>
+        <li><a class="sideoptions" href="/student/my_inventory"> My Inventory</a></li>
+        <li><a class="sideoptions" href="/student/my_team"> Display my Team</a></li>
+        <li><a class="sideoptions" href="/student/team_inventory"> Team Inventory</a></li>
+        <li><a class="sideoptions" href="/student/pick_quest"> Pick Quest</a></li>
+        <li><a class="sideoptions" href="/student/active_quests"> Display active quests</a></li>
+        <li><a class="sideoptions" href="/student/my_attendance"> Show my attendance</a></li>
       </ul>
     </div>

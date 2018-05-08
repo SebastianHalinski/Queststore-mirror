@@ -14,7 +14,8 @@ public class UsersView extends AbstractView {
 
     public void sendResponse(String response, HttpExchange httpExchange) {
         try {
-            httpExchange.sendResponseHeaders(200, response.length());
+            byte[] bs = response.getBytes("UTF-8");
+            httpExchange.sendResponseHeaders(200, bs.length);
             OutputStream os = httpExchange.getResponseBody();
             os.write(response.getBytes());
             os.close();
