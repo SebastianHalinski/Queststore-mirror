@@ -194,7 +194,7 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
 
     private void createExpLvl(HttpExchange httpExchange) throws IOException {
         Map inputs = getInputsMap(httpExchange);
-        String name = inputs.get("fname").toString();
+        String name = inputs.get("lvlname").toString();
         Integer points = Integer.parseInt(inputs.get("points").toString());
         ExperienceLevelsController.getInstance().createExpLevels(name, points);
         Headers responseHeaders = httpExchange.getResponseHeaders();
@@ -212,7 +212,7 @@ public class AdminController extends UserControllerImpl implements HttpHandler {
 
     private void createGroup(HttpExchange httpExchange) throws IOException {
         Map inputs = getInputsMap(httpExchange);
-        String group = inputs.get("fname").toString();
+        String group = inputs.get("gname").toString();
         SchoolController.createGroup(group);
         Headers responseHeaders = httpExchange.getResponseHeaders();
         responseHeaders.add("Location", "/admin");
