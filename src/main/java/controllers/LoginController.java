@@ -25,7 +25,7 @@ public class LoginController implements HttpHandler  {
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        User user = null;
+        User user;
         HttpCookie cookie = createSessionCookie(httpExchange);
         String method = httpExchange.getRequestMethod();
         JtwigTemplate template = JtwigTemplate.classpathTemplate("templates/login.twig");
@@ -41,24 +41,39 @@ public class LoginController implements HttpHandler  {
             BufferedReader br = new BufferedReader(isr);
             String formData = br.readLine();
             Map inputs = parseFormData(formData);
-            user = loggingProcedure(inputs,user, cookie);
+            user = loggingProcedure(inputs,cookie);
             Headers headers = httpExchange.getResponseHeaders();
 
-            if(user.getRole().equals("admin")) {
-                headers.set("Location", "admin?" + cookie.toString() +"?" +user.getId());
-            } else if(user.getRole().equals("mentor")) {
-                headers.set("Location", "mentor");
-            } else if(user.getRole().equals("student")) {
-                headers.set("Location", "student");
+            if(user != null) {
+                redirectToProperUserPanel(httpExchange, user, cookie, headers);
+            } else {
+                sendInfoAboutFailedLogin(httpExchange, model);
             }
-            user = null;
-            httpExchange.sendResponseHeaders(302, -1);
         }
     }
 
-    private User loggingProcedure(Map inputs, User user, HttpCookie cookie) {
+    private void sendInfoAboutFailedLogin(HttpExchange httpExchange, JtwigModel model) {
+        JtwigTemplate template;
+        template = JtwigTemplate.classpathTemplate("templates/loginFailed.twig");
+        String response = template.render(model);
+        view.sendResponse(response, httpExchange);
+    }
+
+    private void redirectToProperUserPanel(HttpExchange httpExchange, User user, HttpCookie cookie, Headers headers) throws IOException {
+        if(user.getRole().equals("admin")) {
+            headers.set("Location", "admin?" + cookie.toString() +"?" +user.getId());
+        } else if(user.getRole().equals("mentor")) {
+            headers.set("Location", "mentor");
+        } else if(user.getRole().equals("student")) {
+            headers.set("Location", "student");
+        }
+        httpExchange.sendResponseHeaders(302, -1);
+    }
+
+    private User loggingProcedure(Map inputs, HttpCookie cookie) {
         String login = inputs.get("uname").toString();
         String password = inputs.get("psw").toString();
+        User user = null;
         try {
             user = SpecialDaoFactory.getByType(LoginDAO.class).getUserByLoginAndPassword(login, password);
             user.setSessionId(cookie.toString());

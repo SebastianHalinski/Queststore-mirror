@@ -40,26 +40,26 @@
          <form method="POST">
            <div class="row">
              <div class="col-25">
-               <label for="fname">Chose Id</label>
+               <label for="mentorId">Chose Id</label>
              </div>
              <div class="col-75">
-               <input type="text" id="fname" name="fname">
+               <input type="text" id="mentorId" name="mentorId" pattern="[0-9]{1,}" required title="Only numbers in ID">
              </div>
            </div>
            <div class="row">
              <div class="col-25">
-               <label for="lname">Chose option</label>
+               <label for="option">Chose option</label>
              </div>
              <div class="col-75">
-               <input type="text" id="lname" name="lname">
+               <input type="number" id="option" name="option" step="1" min="1" max="5" required>
              </div>
            </div>
            <div class="row">
              <div class="col-25">
-               <label for="password">Write text</label>
+               <label for="newData">Enter new data</label>
              </div>
              <div class="col-75">
-               <input type="text" id="password" name="password">
+               <input type="text" id="newData" name="newData" required>
              </div>
            </div>
 
@@ -67,6 +67,7 @@
                  <button class="button" type="submit">Edit</button>
              </div>
          </form>
+        <h4>{{ operationStatus }}</h4>
     </div>
   </body>
 
