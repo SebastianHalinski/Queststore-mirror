@@ -11,11 +11,7 @@
     <script type="text/javascript" src="/static/js/script.js"></script>
   </head>
   <body>
-    <div w3-include-html="student_panel.html"></div>
-     <script>
-      includeHTML();
-     </script> 
-
+  {% include "student_panel.twig" %}
      <div class="content">
       <h2>Available Quests</h2>
       <div id="table">
@@ -28,70 +24,21 @@
           <div class="cell">Status</div>
           <div class="cell"></div>
         </div>
+        {% for quest in questsList %}
         <div class="row">
-            <div class="cell">1</div>
-            <div class="cell">B</div>
-            <div class="cell">Exploring a dungeon</div>
-            <div class="cell">Finishing a Teamwork week</div>
-            <div class="cell">100 cc</div>
-            <div class="cell">Available</div>
+            <div class="cell">{{ quest.getId() }}</div>
+            <div class="cell">{{ quest.getType() }}</div>
+            <div class="cell">{{ quest.getName() }}</div>
+            <div class="cell">{{ quest.getDescription() }}</div>
+            <div class="cell">{{ quest.getReward() }}</div>
+            <div class="cell">{{ quest.getStatus() }}</div>
             <div class="cell">
-              <form>
-                  <input class="button" type="button" value="Take Quest!">
+              <form method="POST">
+                  <a></a><input class="button" type="submit" value="Take Quest!" name="{{ quest.getId }}">
               </form>
             </div>
         </div>
-        <div class="row">
-          <div class="cell">2</div>
-          <div class="cell">B</div>
-          <div class="cell">Solving the magic puzzle</div>
-          <div class="cell">Finishing an SI assignment </div>
-          <div class="cell">100 cc</div>
-          <div class="cell">Available</div>
-          <div class="cell">
-            <form>
-              <input class="button" type="button" value="Take Quest!">
-            </form>
-          </div>
-        </div>
-          <div class="row">
-          <div class="cell">3</div>
-          <div class="cell">B</div>
-          <div class="cell">Slaying a dragon</div>
-          <div class="cell">Passing a Checkpoint in the first attempt</div>
-          <div class="cell">500 cc</div>
-          <div class="cell">Available</div>
-          <div class="cell">
-            <form>
-              <input class="button" type="button" value="Take Quest!">
-            </form>
-          </div>
-        </div>
-          <div class="row">
-          <div class="cell">4</div>
-          <div class="cell">E</div>
-          <div class="cell">Spot trap</div>
-          <div class="cell">Spot a major mistake in the assignment</div>
-          <div class="cell">50 cc</div>
-          <div class="cell">Available</div>
-          <div class="cell">
-            <form>
-              <input class="button" type="button" value="Take Quest!">
-            </form>
-          </div>
-        </div>
-        <div class="row">
-          <div class="cell">5</div>
-          <div class="cell">E</div>
-          <div class="cell">Taming a pet</div>
-          <div class="cell">Doing a demo about a pet project</div>
-          <div class="cell">100 cc</div>
-          <div class="cell">Available</div>
-          <div class="cell">
-            <form>
-              <input class="button" type="button" value="Take Quest!">
-            </form>
-          </div>
+        {% endfor %}
         </div>
       </div>
   </body>

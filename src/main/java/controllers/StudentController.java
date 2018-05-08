@@ -10,11 +10,12 @@ import org.jtwig.JtwigTemplate;
 import view.StudentView;
 
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.*;
 
 import static enums.QuestsStatus.WAITING_FOR_APPROVAL;
 
@@ -51,7 +52,7 @@ public class StudentController extends UserControllerImpl implements HttpHandler
                 response = template.render(model);
                 String uri = httpExchange.getRequestURI().toString();
                 String studentRoot = "/student";
-                postPageManager(uri, studentRoot, httpExchange, response, model);
+                postPageManager(student, uri, studentRoot, httpExchange, response, model);
             }
             view.sendResponse(response, httpExchange);
         }
@@ -70,7 +71,7 @@ public class StudentController extends UserControllerImpl implements HttpHandler
         return ModelDaoFactory.getByType(StudentDAO.class).getModelById(id);
     }
 
-    private void postPageManager(String uri, String studentRoot, HttpExchange httpExchange, String response, JtwigModel model) throws IOException {
+    private void postPageManager(Student student, String uri, String studentRoot, HttpExchange httpExchange, String response, JtwigModel model) throws IOException {
         if (uri.startsWith(studentRoot)) {
             if (uri.startsWith("/shop", studentRoot.length())) {
 //                createMentor(httpExchange);
@@ -85,8 +86,19 @@ public class StudentController extends UserControllerImpl implements HttpHandler
 //                createExpLvl(httpExchange);
 //                return;
             }
-            else if (uri.startsWith("/display_mentor", studentRoot.length())) {
-//                response = dispalyMentor(httpExchange);
+            else if (uri.startsWith("/pick_quest", studentRoot.length())) {
+                Map inputs = getInputsMap(httpExchange);
+                List<Quest> quests = ModelDaoFactory.getByType(QuestDAO.class).getAllModels();
+                Integer questId = 0;
+                for(Object key : inputs.keySet()) {
+                    questId = Integer.valueOf(String.valueOf(key));
+                }
+                Integer finalQuestId = questId;
+                Quest pickedQuest = quests.stream()
+                        .filter(q -> q.getId() == finalQuestId)
+                        .findAny()
+                        .orElse(null);
+                student.getStudentsQuests().addItem(pickedQuest);
             }
             else if (uri.startsWith("/display_students_by_mentor", studentRoot.length())) {
 //                response = displayStudentsByMentor(httpExchange, model);
@@ -123,12 +135,19 @@ public class StudentController extends UserControllerImpl implements HttpHandler
                 response = template.render(model);
             } else if (uri.startsWith("/pick_quest", studentRoot.length())) {
                 template = JtwigTemplate.classpathTemplate("templates/student/available_quests.twig");
+                List<Quest> quests = ModelDaoFactory.getByType(QuestDAO.class).getAllModels();
+                model.with("questsList", quests);
                 response = template.render(model);
             } else if (uri.startsWith("/active_quests", studentRoot.length())) {
-                template = JtwigTemplate.classpathTemplate("templates/student/active_quests.twig");
+                Set activeQuests = student.getStudentsQuests().getStock().entrySet();
+                if(activeQuests.size() != 0) {
+                    template = JtwigTemplate.classpathTemplate("templates/student/active_quests.twig");
+                    model.with("questsList", activeQuests);
+                }
                 response = template.render(model);
             } else if (uri.startsWith("/my_attendance", studentRoot.length())) {
                 template = JtwigTemplate.classpathTemplate("templates/student/attendance.twig");
+                model.with("attendance", student.getAttendance().getPercentageAttendance());
                 response = template.render(model);
             } else if (uri.startsWith("/student", studentRoot.length())) {
                 redirectToStudentPage(httpExchange);
@@ -141,6 +160,24 @@ public class StudentController extends UserControllerImpl implements HttpHandler
             }
         }
         view.sendResponse(response, httpExchange);
+    }
+
+    private Map getInputsMap(HttpExchange httpExchange) throws IOException {
+        InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
+        BufferedReader br = new BufferedReader(isr);
+        String formData = br.readLine();
+        return parseFormData(formData);
+    }
+
+    private static Map<String, String> parseFormData(String formData) throws UnsupportedEncodingException {
+        Map<String, String> map = new HashMap<>();
+        String[] pairs = formData.split("&");
+        for (String pair : pairs) {
+            String[] keyValue = pair.split("=");
+            String value = new URLDecoder().decode(keyValue[1], "UTF-8");
+            map.put(keyValue[0], value);
+        }
+        return map;
     }
 
 
