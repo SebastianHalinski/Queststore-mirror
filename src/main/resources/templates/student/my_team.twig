@@ -12,19 +12,16 @@
 
   </head>
   <body>
-    <div w3-include-html="student_panel.html"></div>
-    <script>
-      includeHTML();
-    </script> 
+  {% include "student_panel.twig" %}
 
     <div class="content">
       <h2>My Team</h2>
       <div class="team">
-        <h3>Team name: NazwaGrupy.java</h3>
+        <h3>Team name: {{ student.getTeam().getName() }}</h3>
         <ol>
-          <li><i class="far fa-user"></i>  Kamil Boksa role: student id: 105 email: abcd@gmail.com</li>
-          <li><i class="far fa-user"></i>  Sebastian Haliński role: student id: 106 email: defg@cc.com</li>
-          <li><i class="far fa-user"></i>  Kuba Mikołajczyk role: student id: 107 email: hijk@cc.com</li>
+          {% for member in team %}
+          <li><i class="far fa-user"></i>  {{ member.getFullName() }} role: {{ member.getRole() }} id: {{ member.getId() }} email: {{ member.getEmail() }}</li>
+          {% endfor %}
         </ol>
       </div>
       <hr>
