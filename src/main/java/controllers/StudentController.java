@@ -78,8 +78,7 @@ public class StudentController extends UserControllerImpl implements HttpHandler
 //                createMentor(httpExchange);
 //                return;
             } else if (uri.startsWith("/my_inventory", studentRoot.length())) {
-//                editMentor(httpExchange);
-//                return;
+                response = handleUsingInventoryArtifactByStudent(httpExchange, student);
             } else if (uri.startsWith("/create_group", studentRoot.length())) {
 //                createGroup(httpExchange);
 //                return;
@@ -96,6 +95,38 @@ public class StudentController extends UserControllerImpl implements HttpHandler
             }
         }
         view.sendResponse(response, httpExchange);
+    }
+
+    private String handleUsingInventoryArtifactByStudent(HttpExchange httpExchange, Student student) throws IOException {
+        Map inputs = getInputsMap(httpExchange);
+        Integer id = 0;
+
+        for (Object key : inputs.keySet()) {
+            id = Integer.valueOf(String.valueOf(key));
+        }
+
+        decreaseStudentArtifactQuantity(id, student);
+
+        JtwigTemplate template = JtwigTemplate.classpathTemplate("templates/student/my_inventory.twig");
+        JtwigModel model = JtwigModel.newModel();
+        Set studentInventory = student.getInventory().getStock().entrySet();
+        model.with("studentInventory", studentInventory);
+        model.with("operationStatus", "Artifact used!");
+        return template.render(model);
+    }
+
+    private void decreaseStudentArtifactQuantity(Integer id, Student student) {
+        StudentInventory inventory = student.getInventory();
+        Set<Artifact> artifacts = inventory.getStock().keySet();
+        List<Artifact> artifactsCopy = new ArrayList<>(artifacts);
+        for (Iterator<Artifact> iterator = artifactsCopy.iterator(); iterator.hasNext(); ) {
+            Artifact artifact = iterator.next();
+            if (id == artifact.getId() && inventory.getStock().get(artifact) == 1) {
+                inventory.removeArtifact(artifact);
+            } else if (id == artifact.getId() && id == artifact.getId()) {
+                inventory.decreaseQuantity(artifact);
+            }
+        }
     }
 
     private String handlePickingNewQuestByStudent(HttpExchange httpExchange, Student student) throws IOException {
