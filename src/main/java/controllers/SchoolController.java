@@ -3,10 +3,7 @@ package controllers;
 import dao.SchoolDAO;
 import dao.SpecialDaoFactory;
 import factory.GeneralModelFactory;
-import factory.ModelFactory;
 import model.*;
-import view.SchoolView;
-import view.UsersView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,71 +31,50 @@ public class SchoolController {
         mentor.setGroup(newGroup);
     }
 
-    public static void assignMentorToGroup(Mentor mentor){
-        SchoolView view = new SchoolView();
-        List<Group> groups = getGroups();
-        boolean isMentorAssigned = false;
-        String chosenGroupName = "";
-        while (!isMentorAssigned && !chosenGroupName.equals("0")){
-            view.displayObjects(groups);
-            chosenGroupName = view.getUserInput("Choose group by name (or type 0 to exit): ");
-            for (Group group : groups){
-                if (chosenGroupName.equals(group.getName())){
-                    mentor.setGroup(group);
-                    isMentorAssigned = true;
-                    break;
-                }
-            }
-            if (!isMentorAssigned && !chosenGroupName.equals("0")){
-                view.displayMessageInNextLine("- there is no such group...");
-            }
-        }
-    }
-
     public static void assignStudentToGroup(Student student){
-        SchoolView view = new SchoolView();
+        //SchoolView view = new SchoolView();
         List<Group> groups = getGroups();
         boolean isStudentAssigned = false;
         String chosenGroupName = "";
         while (!isStudentAssigned && !chosenGroupName.equals("0")){
-            view.displayObjects(groups);
-            chosenGroupName = view.getUserInput("Choose group by name (or type 0 to exit): ");
+            //view.displayObjects(groups);
+            //chosenGroupName = view.getUserInput("Choose group by name (or type 0 to exit): ");
             for (Group group : groups){
                 if (chosenGroupName.equals(group.getName())){
                     student.setGroup(group);
-                    view.displayMessageInNextLine("- student moved to group: " + group.getName());
+                    //view.displayMessageInNextLine("- student moved to group: " + group.getName());
                     if (student.getTeam().getId() != 1){
                         student.setTeam(getDefaultTeam());
-                        view.displayMessageInNextLine("- student moved to undefined team...");
+                        //view.displayMessageInNextLine("- student moved to undefined team...");
                     }
                     isStudentAssigned = true;
                     break;
                 }
             }
             if (!isStudentAssigned && !chosenGroupName.equals("0")){
-                view.displayMessageInNextLine("- there is no such group...");
+                //view.displayMessageInNextLine("- there is no such group...");
             }
         }
     }
 
     public static void assignStudentToTeam(Student student) {
-        SchoolView view = new SchoolView();
+        //SchoolView view = new SchoolView();
         List<Team> teams = getTeamsByGroup(student.getGroup());
         boolean isStudentAssigned = false;
         String chosenTeamName = "";
         while (!isStudentAssigned && !chosenTeamName.equals("0")){
-            view.displayObjects(teams);
-            chosenTeamName = view.getUserInput("Choose team by name (or type 0 to exit): ");
+            //view.displayObjects(teams);
+            //chosenTeamName = view.getUserInput("Choose team by name (or type 0 to exit): ");
             for (Team team : teams){
                 if (chosenTeamName.equals(team.getName())){
                     student.setTeam(team);
-                    view.displayMessageInNextLine("- student moved to team: " + team.getName());
+                    //view.displayMessageInNextLine("- student moved to team: " + team.getName());
                     isStudentAssigned = true;
                     break;
                 }
             }
             if (!isStudentAssigned && !chosenTeamName.equals("0")){
-                view.displayMessageInNextLine("- there is no such group...");
+                //view.displayMessageInNextLine("- there is no such group...");
             }
         }
     }
@@ -115,7 +91,7 @@ public class SchoolController {
                 if (groupId == group.getId()){
                     teamsByGroup.add(team);
                 }
-            } 
+            }
         }
         return teamsByGroup;
     }
@@ -137,12 +113,12 @@ public class SchoolController {
     }
 
     public static Student pickStudentFromList(List<Student> students) {
-        SchoolView view = new SchoolView();
-        view.displayObjects(students);
-        String id = view.getUserInput("Choose student by id: ");
-        view.drawNextLine();
+        //SchoolView view = new SchoolView();
+        //view.displayObjects(students);
+        //String id = view.getUserInput("Choose student by id: ");
+        //view.drawNextLine();
         return students.stream()
-                .filter(s -> String.valueOf(s.getId()).equals(id))
+                //.filter(s -> String.valueOf(s.getId()).equals(id))
                 .findAny()
                 .orElse(null);
     }
@@ -159,70 +135,44 @@ public class SchoolController {
                 .orElse(null);
     }
 
-    public static void createNewTeam(){
-        boolean isDone = false;
-        String teamName;
-        SchoolView view = new SchoolView();
-        while (!isDone){
-            view.clearScreen();
-            teamName = view.getUserInput("Enter team name (or 0 to exit): ");
-            if (teamName.equals("0")){
-                isDone = true;
-            } else if (getTeamNames().contains(teamName)) {
-                view.displayMessageInNextLine("- Team already exist...");
-            } else {
-                Team team = GeneralModelFactory.getByType(TeamFactoryImpl.class)
-                        .create(teamName);
-
-                view.clearScreen();
-                view.displayMessageInNextLine("- Team created: \n");
-                view.displayObject(team);
-                isDone = true;
-            }
-            if(! isDone) {
-                view.handlePause();
-            }
-        }
-    }
+//    public static void createNewTeam(){
+//        boolean isDone = false;
+//        String teamName;
+//        //SchoolView view = new SchoolView();
+//        while (!isDone){
+//            //view.clearScreen();
+//            //teamName = view.getUserInput("Enter team name (or 0 to exit): ");
+//            if (teamName.equals("0")){
+//                isDone = true;
+//            } else if (getTeamNames().contains(teamName)) {
+//                //view.displayMessageInNextLine("- Team already exist...");
+//            } else {
+//                Team team = GeneralModelFactory.getByType(TeamFactoryImpl.class)
+//                        .create(teamName);
+//
+//                //view.clearScreen();
+//                //view.displayMessageInNextLine("- Team created: \n");
+//                //view.displayObject(team);
+//                isDone = true;
+//            }
+//            if(! isDone) {
+//                //view.handlePause();
+//            }
+//        }
+//    }
     public static void createGroup(String group){
         GeneralModelFactory.getByType(GroupFactoryImpl.class).create(group);
     }
 
-
-    public static void createNewGroup(){
-        boolean isDone = false;
-        String groupName;
-        SchoolView view = new SchoolView();
-        while (!isDone){
-            view.clearScreen();
-            groupName = view.getUserInput("Enter group name (or 0 to exit): ");
-            if (groupName.equals("0")){
-                break;
-            } else if (getGroupNames().contains(groupName)) {
-                view.displayMessageInNextLine("- group already exist...");
-            } else {
-                Group newGroup = GeneralModelFactory.getByType(GroupFactoryImpl.class)
-                        .create(groupName);
-                view.clearScreen();
-                view.displayMessageInNextLine("- group created: \n");
-                view.displayObject(newGroup);
-                isDone = true;
-            }
-            if(! isDone) {
-                view.handlePause();
-            }
-        }
-    }
-
     public static void checkAttendance(Mentor mentor){
-        SchoolView view = new SchoolView();
+        //SchoolView view = new SchoolView();
         for (Student student : getStudentsByGroup(mentor.getGroup())){
             boolean isPresenceChecked = false;
             while (!isPresenceChecked){
-                view.clearScreen();
-                String userInput = view.getUserInput(String.format("- Is %s present (y/anything else): ", student.getFullName()));
-                boolean isPresent = userInput.equals("y");
-                student.addAttendance(isPresent);
+                //view.clearScreen();
+                //String userInput = view.getUserInput(String.format("- Is %s present (y/anything else): ", student.getFullName()));
+                //boolean isPresent = userInput.equals("y");
+                //student.addAttendance(isPresent);
                 isPresenceChecked = true;
             }
         }

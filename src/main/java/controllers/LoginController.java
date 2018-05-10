@@ -65,7 +65,7 @@ public class LoginController implements HttpHandler  {
         } else if(user.getRole().equals("mentor")) {
             headers.set("Location", "mentor");
         } else if(user.getRole().equals("student")) {
-            headers.set("Location", "student");
+            headers.set("Location", "student?" + cookie.toString() + "?" + user.getId());
         }
         httpExchange.sendResponseHeaders(302, -1);
     }

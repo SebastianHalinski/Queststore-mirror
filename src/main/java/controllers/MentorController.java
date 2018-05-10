@@ -90,7 +90,7 @@ public class MentorController extends UserControllerImpl implements HttpHandler 
                     showStudentsFromMyGroup();
                     break;
                 case "13":
-                    SchoolController.createNewTeam();
+                    //SchoolController.createNewTeam();
                     break;
                 case "14":
                     SchoolController.checkAttendance(mentor);

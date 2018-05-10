@@ -2,21 +2,18 @@
 <html lang="en">
   <head>
 
-    <link rel="stylesheet" href="../css/my_inventory.css">
-    <link rel="stylesheet" type="text/css" href="../css/student_panel.css">
-    <link rel="stylesheet" type="text/css" href="../../src/main/resources/static/button.css">
+    <link rel="stylesheet" href="/static/css/my_inventory.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/student_panel.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/button.css">
     <meta charset="utf-8">
     <title>Student page</title>
     <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="../js/script.js"></script>
+    <script type="text/javascript" src="/static/js/script.js"></script>
 
   </head>
   <body>
-    <div w3-include-html="student_panel.html"></div>
-     <script>
-      includeHTML();
-     </script>
+  {% include "student_panel.twig" %}
 
     <div class="content">
       <h2>My Inventory</h2>
@@ -27,27 +24,20 @@
           <div class="cell">Amount</div>
           <div class="cell"></div>
         </div>
+        {% for entry in studentInventory %}
         <div class="row">
-          <div class="cell">1</div>
-          <div class="cell">Coffee</div>
-          <div class="cell">3</div>
+          <div class="cell">{{ entry.getKey().getId() }}</div>
+          <div class="cell">{{ entry.getKey().getName() }}</div>
+          <div class="cell">{{ entry.getValue() }}</div>
           <div class="cell">
-            <form>
-              <input class="use-button button" type="button" value="Use artifact!">
+            <form method="POST">
+              <input class="use-button button" type="submit" value="Use artifact!" name="{{ entry.getKey().getId() }}">
             </form>
           </div>
         </div>
-        <div class="row">
-          <div class="cell">2</div>
-          <div class="cell">Combat Training</div>
-          <div class="cell">1</div>
-          <div class="cell">
-            <form>
-              <input class="use-button button" type="button" value="Use artifact!">
-            </form>
-          </div>
-        </div>
+        {% endfor %}
       </div>
+        <h4>{{ operationStatus }}</h4>
     </div>
 
   </body>
