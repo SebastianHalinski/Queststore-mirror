@@ -75,27 +75,82 @@ public class StudentController extends UserControllerImpl implements HttpHandler
     private void postPageManager(Student student, String uri, String studentRoot, HttpExchange httpExchange, String response, JtwigModel model) throws IOException {
         if (uri.startsWith(studentRoot)) {
             if (uri.startsWith("/shop", studentRoot.length())) {
-//                createMentor(httpExchange);
-//                return;
+                //TO DO
             } else if (uri.startsWith("/my_inventory", studentRoot.length())) {
                 response = handleUsingInventoryArtifactByStudent(httpExchange, student);
-            } else if (uri.startsWith("/create_group", studentRoot.length())) {
-//                createGroup(httpExchange);
-//                return;
-            } else if (uri.startsWith("/createexplvl", studentRoot.length())) {
-//                createExpLvl(httpExchange);
-//                return;
+            } else if (uri.startsWith("/team_inventory", studentRoot.length())) {
+                response = handleUsingTeamInventoryArtifact(httpExchange, student);
+            } else if (uri.startsWith("/active_quests", studentRoot.length())) {
+                response = handleMarkingChoosedQuest(httpExchange, student);
             }
             else if (uri.startsWith("/pick_quest", studentRoot.length())) {
                 response = handlePickingNewQuestByStudent(httpExchange, student);
-
-            }
-            else if (uri.startsWith("/display_students_by_mentor", studentRoot.length())) {
-//                response = displayStudentsByMentor(httpExchange, model);
             }
         }
         view.sendResponse(response, httpExchange);
     }
+
+    private String handleMarkingChoosedQuest(HttpExchange httpExchange, Student student) throws IOException {
+        Map inputs = getInputsMap(httpExchange);
+        Integer id = 0;
+
+        for (Object key : inputs.keySet()) {
+            id = Integer.valueOf(String.valueOf(key));
+        }
+
+        markSelectedQuest(id, student);
+
+        JtwigTemplate template = JtwigTemplate.classpathTemplate("templates/student/active_quests.twig");
+        JtwigModel model = JtwigModel.newModel();
+        Set quests = student.getStudentsQuests().getStock().entrySet();
+        model.with("questsList", quests);
+        model.with("operationStatus", "Quest marked, waiting for mentor acceptance");
+        return template.render(model);
+    }
+
+    private void markSelectedQuest(Integer id, Student student) {
+        List<Quest> quests = new ArrayList<>(student.getStudentsQuests().getStock().keySet());
+        for (Quest quest : quests){
+            if (quest.getId() == id){
+                quest.setStatus(QuestsStatus.WAITING_FOR_APPROVAL.getName());
+            }
+        }
+    }
+
+    private String handleUsingTeamInventoryArtifact(HttpExchange httpExchange, Student student) throws IOException {
+        Map inputs = getInputsMap(httpExchange);
+        Integer id = 0;
+        Team team = student.getTeam();
+
+        for (Object key : inputs.keySet()) {
+            id = Integer.valueOf(String.valueOf(key));
+        }
+
+        decreaseTeamArtifactQuantity(id, student);
+
+        JtwigTemplate template = JtwigTemplate.classpathTemplate("templates/student/team_inventory.twig");
+        JtwigModel model = JtwigModel.newModel();
+        Set teamInventory = team.getInventory().getStock().entrySet();
+        model.with("teamArtifacts", teamInventory);
+        model.with("operationStatus", "Artifact used!");
+        return template.render(model);
+    }
+
+    private void decreaseTeamArtifactQuantity(Integer id, Student student) {
+            TeamInventory inventory = student.getTeam().getInventory();
+            Set<Artifact> artifacts = inventory.getStock().keySet();
+            List<Artifact> artifactsCopy = new ArrayList<>(artifacts);
+            for (Iterator<Artifact> iterator = artifactsCopy.iterator(); iterator.hasNext();){
+                Artifact artifact = iterator.next();
+                if(id == artifact.getId() && inventory.getStock().get(artifact) == 1) {
+                   inventory.removeArtifact(artifact);
+                   break;
+                }
+               else if ((id == artifact.getId())) {
+                   inventory.decreaseQuantity(artifact);
+                }
+            }
+        }
 
     private String handleUsingInventoryArtifactByStudent(HttpExchange httpExchange, Student student) throws IOException {
         Map inputs = getInputsMap(httpExchange);
@@ -285,70 +340,4 @@ public class StudentController extends UserControllerImpl implements HttpHandler
         }
         return map;
     }
-
-//    private void executeShopping() {
-//        Shop shop = new Shop();
-//        ShopController controller = new ShopController(shop, student);
-//        controller.executeShoppingMenu();
-//        }
-//
-//    private void useArtifacts() {
-//        showMyInventory();
-//        if(student.getInventory().getStock().isEmpty()){
-//            view.displayMessageInNextLine("- sorry, You have nothing to use!");
-//        } else {
-//            int id = view.getIntegerFromUser("Enter artifact id: ");
-//            StudentInventory inventory = student.getInventory();
-//            Set<Artifact> artifacts = inventory.getStock().keySet();
-//            List<Artifact> artifactsCopy = new ArrayList<>(artifacts);
-//            for (Iterator<Artifact> iterator = artifactsCopy.iterator(); iterator.hasNext();){
-//                Artifact artifact = iterator.next();
-//                if(id == artifact.getId() && inventory.getStock().get(artifact) == 1) {
-//                    inventory.removeArtifact(artifact);
-//                    view.displayMessageInNextLine("- artifact used!");
-//                }
-//                else if (id == artifact.getId() && id == artifact.getId()) {
-//                    inventory.decreaseQuantity(artifact);
-//                    view.displayMessageInNextLine("- artifact used!");
-//                }
-//            }
-//        }
-//    }
-
-//    private void useTeamArtifacts() {
-//        view.clearScreen();
-//        showTeamInventory();
-//        if(student.getTeam().getInventory().getStock().isEmpty()){
-//            view.displayMessageInNextLine("- sorry, You have nothing to use!");
-//        } else {
-//            int id = view.getIntegerFromUser("Enter artifact id: ");
-//            TeamInventory inventory = student.getTeam().getInventory();
-//            Set<Artifact> artifacts = inventory.getStock().keySet();
-//            List<Artifact> artifactsCopy = new ArrayList<>(artifacts);
-//            for (Iterator<Artifact> iterator = artifactsCopy.iterator(); iterator.hasNext();){
-//                Artifact artifact = iterator.next();
-//                if(id == artifact.getId() && inventory.getStock().get(artifact) == 1) {
-//                    inventory.removeArtifact(artifact);
-//                    view.displayMessageInNextLine("- artifact used!");
-//                    break;
-//                }
-//                else if ((id == artifact.getId())) {
-//                    inventory.decreaseQuantity(artifact);
-//                    view.displayMessageInNextLine("- artifact used!");
-//                }
-//            }
-//        }
-//    }
-//
-//    private void markQuest(){
-//        showMyQuests();
-//        List<Quest> quests = new ArrayList<>(student.getStudentsQuests().getStock().keySet());
-//        int questId = view.getNotNegativeNumberFromUser("Choose quest: ");
-//        for (Quest quest : quests){
-//            if (quest.getId() == questId){
-//                quest.setStatus(QuestsStatus.WAITING_FOR_APPROVAL.getName());
-//                view.displayMessage("Actual quest status: " + quest.getStatus());
-//            }
-//        }
-//    }
 }

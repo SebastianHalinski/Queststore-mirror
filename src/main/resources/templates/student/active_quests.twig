@@ -32,13 +32,14 @@
               <div class="cell">{{ entry.getValue() }}</div>
               <div class="cell">{{ entry.getKey().getStatus() }}</div>
               <div class="cell">
-              <form>
-                  <input class="button" type="button" value="Mark as done">
+              <form method="POST">
+                <input class="use-button button" type="submit" value="Mark as done" name="{{ entry.getKey().getId() }}">
               </form>
               </div>
             </div>
           {% endfor %}
       </div>
+      <h4>{{ operationStatus }}</h4>
     </div>
   </body>
   </html>

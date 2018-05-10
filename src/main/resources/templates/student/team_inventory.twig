@@ -28,13 +28,14 @@
           <div class="cell">{{ entry.getKey().getName() }}</div>
           <div class="cell">{{ entry.getValue() }}</div>
           <div class="cell">
-            <form>
-              <input class="use-button button" type="button" value="Use artifact!">
+            <form method="POST">
+              <input class="use-button button" type="submit" value="Use artifact!" name="{{ entry.getKey().getId() }}">
             </form>
           </div>
         </div>
         {% endfor %}
       </div>
+      <h4>{{ operationStatus }}</h4>
     </div>
   </body>
 </html>
