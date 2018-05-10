@@ -97,7 +97,6 @@ public class StudentController extends UserControllerImpl implements HttpHandler
         for (Object key : inputs.keySet()) {
             id = Integer.valueOf(String.valueOf(key));
         }
-
         markSelectedQuest(id, student);
 
         JtwigTemplate template = JtwigTemplate.classpathTemplate("templates/student/active_quests.twig");
@@ -293,6 +292,7 @@ public class StudentController extends UserControllerImpl implements HttpHandler
         model.with("teamName", student.getTeam().getName());
         model.with("walletBalance", student.getWallet());
         model.with("levelName", student.getExperienceLevel());
+        model.with("experiencePoints", student.getExperience());
         return template.render(model);
     }
 
