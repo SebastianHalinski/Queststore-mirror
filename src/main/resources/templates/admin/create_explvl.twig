@@ -26,10 +26,10 @@
 	  <form method="POST">
 		<div class="row">
 		  <div class="col-25">
-			<label for="fname">Expirience level name</label>
+			<label for="lvlname">Expirience level name</label>
 		  </div>
 		  <div class="col-75">
-			<input type="text" id="fname" name="fname">
+			<input type="text" id="lvlname" name="lvlname" required>
 		  </div>
 		</div>
         <div class="row">
@@ -37,16 +37,14 @@
 			<label for="points">Experience level points</label>
 		  </div>
 		  <div class="col-75">
-			<input type="text" id="points" name="points">
+			<input type="text" id="points" name="points" pattern="[0-9]{1,}" required title="Only numbers as points">
 		  </div>
 		</div>
 		  <div class="row">
 			<input class="button" id="submit" type="submit" value="Create">
 		  </div>
-		</div>
 	  </form>
+		<h4>{{ operationStatus }}</h4>
    </div>
   </body>
-
-
 </html>
