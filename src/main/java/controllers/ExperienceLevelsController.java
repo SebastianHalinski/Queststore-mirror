@@ -6,7 +6,6 @@ import model.ExperienceLevels;
 import tools.DataTool;
 
 import model.Student;
-import view.SchoolView;
 import factory.GeneralModelFactory;
 
 
@@ -17,7 +16,6 @@ import java.util.Map;
 
 public class ExperienceLevelsController {
 
-    private SchoolView view;
     private ExperienceLevels experienceLevels;
 
 
@@ -26,7 +24,6 @@ public class ExperienceLevelsController {
     }
 
     private ExperienceLevelsController() {
-        view = new SchoolView();
         experienceLevels = getExperienceLevels();
     }
 

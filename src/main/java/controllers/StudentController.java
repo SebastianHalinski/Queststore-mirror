@@ -7,10 +7,8 @@ import enums.QuestsStatus;
 import model.*;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
-import view.StudentView;
+import view.UsersView;
 
-
-import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -18,14 +16,12 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.*;
 
-import static enums.QuestsStatus.WAITING_FOR_APPROVAL;
-
 public class StudentController extends UserControllerImpl implements HttpHandler {
-    private StudentView view;
+    private UsersView view;
     private String sessionId;
 
     public StudentController(){
-        this.view = new StudentView();
+        this.view = new UsersView();
     }
 
     @Override
@@ -34,7 +30,6 @@ public class StudentController extends UserControllerImpl implements HttpHandler
         if (httpExchange.getRequestURI().toString().contains("sessionId")) {
             sessionId = httpExchange.getRequestURI().toString();
             redirectToStudentPage(httpExchange);
-            return;
         } else {
             Student student = getLoggedStudent(sessionId);
             student.setSessionId(sessionId);

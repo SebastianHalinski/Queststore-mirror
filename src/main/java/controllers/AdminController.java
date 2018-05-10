@@ -13,15 +13,15 @@ import factory.GeneralModelFactory;
 import model.*;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
-import view.AdminView;
+import view.UsersView;
 
 public class AdminController extends UserControllerImpl implements HttpHandler {
 
-    private AdminView view;
+    private UsersView view;
     private String sessionId;
 
     public AdminController() {
-        this.view = new AdminView();
+        this.view = new UsersView();
     }
 
     @Override
